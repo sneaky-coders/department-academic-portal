@@ -10,7 +10,7 @@ class Timetable extends ActiveRecord
     public function generateTimetable()
     {
         // Get all courses
-        $courses = Course::find()->all();
+        $courses = Courses::find()->all();
 
         // Iterate through each course
         foreach ($courses as $course) {
