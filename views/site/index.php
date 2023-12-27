@@ -11,13 +11,10 @@ use yii\helpers\Url;
 use dosamigos\chartjs\ChartJs;
 use miloschuman\highcharts\Highcharts;
 use app\models\Questions;
-use app\models\Register;
-use app\models\Test;
+
 use app\models\Users;
 use app\models\Event;
-use app\models\Set1;
-use app\models\Set2;
-use app\models\Allotment;
+
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\View;
