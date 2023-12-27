@@ -71,21 +71,9 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
            
             
-            $mapleData = Set1::find()
-            ->select(['usn', 'total'])
-            ->where(['category' => 'Set1'])
-            ->asArray()
-            ->all();
-    
-        $accentureData = Set2::find()
-            ->select(['usn', 'total'])
-            ->where(['category' => 'Set2'])
-            ->asArray()
-            ->all();
-    
+          
         return $this->render('index', [
-            'mapleData' => $mapleData,
-            'accentureData' => $accentureData,
+           
         ]);
     
             

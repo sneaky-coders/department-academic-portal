@@ -14,17 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php 
-    
-    if(Yii::$app->user->identity->level == 1)
-    {
-        
-        Html::a('Create Users', ['create'], ['class' => 'btn btn-success']) ;
-   
+    if (Yii::$app->user->identity->level == 1) {
+        echo Html::a('Create Users', ['create'], ['class' => 'btn btn-success']);
     }
-
     ?>
-
- 
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -33,31 +26,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             //'user_id',
             'username',
-            //'password',
+            'password',
             'email:email',
-            'usn',
-            'batch',
-            //'ismentor',
-            //'hasMentor',
-            'xcgpa',
-            'xiicgpa',
-            'bachelorcgpa',
-            'sem1cgpa',
-            'sem2cgpa',
-            'sem3cgpa',
-            'sem4cgpa',
-            //'mentor_id',
-            //'profile',
-            //'level',
+            'contact',
+            [
+                'attribute' => 'level',
+                'value' => function ($model) {
+                    return ($model->level == 1) ? 'Admin' : (($model->level == 2) ? 'Faculty' : 'Student');
+                }
+            ],
             //'created_at',
             //'updated_at',
 
-            ['class' => 'yii\grid\ActionColumn','template' => '{update}'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{update}{view}{delete}'],
         ],
     ]); ?>
-
-
 </div>

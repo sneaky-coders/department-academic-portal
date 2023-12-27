@@ -5,25 +5,27 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "electiveenrollment".
+ * This is the model class for table "faculty".
  *
  * @property int $id
  * @property int $user_id
- * @property string $elective1
- * @property string $elective2
+ * @property string $name
+ * @property string $email
+ * @property int $contact
+ * @property string $staffid
  * @property string $created_at
  * @property string|null $updated_at
  *
  * @property Users $user
  */
-class Electiveenrollment extends \yii\db\ActiveRecord
+class Faculty extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'electiveenrollment';
+        return 'faculty';
     }
 
     /**
@@ -32,11 +34,11 @@ class Electiveenrollment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'elective1', 'elective2'], 'required'],
-            [['user_id'], 'integer'],
-            [['user_id'], 'unique'],
+            [['user_id', 'name', 'email', 'contact', 'staffid'], 'required'],
+            [['user_id', 'contact'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['elective1', 'elective2'], 'string', 'max' => 100],
+            [['name', 'email'], 'string', 'max' => 100],
+            [['staffid'], 'string', 'max' => 30],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
         ];
     }
@@ -49,8 +51,10 @@ class Electiveenrollment extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'elective1' => 'Elective1',
-            'elective2' => 'Elective2',
+            'name' => 'Name',
+            'email' => 'Email',
+            'contact' => 'Contact',
+            'staffid' => 'Staffid',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

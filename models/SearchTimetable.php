@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Users;
+use app\models\Timetable;
 
 /**
- * SearchUsers represents the model behind the search form of `app\models\Users`.
+ * SearchTimetable represents the model behind the search form of `app\models\Timetable`.
  */
-class SearchUsers extends Users
+class SearchTimetable extends Timetable
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class SearchUsers extends Users
     public function rules()
     {
         return [
-            [['user_id',  'level'], 'integer'],
-            [['username', 'password', 'email', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'course_id', 'teacher_id'], 'integer'],
+            [['day', 'time_start', 'time_end', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class SearchUsers extends Users
      */
     public function search($params)
     {
-        $query = Users::find();
+        $query = Timetable::find();
 
         // add conditions that should always apply here
 
@@ -58,16 +58,16 @@ class SearchUsers extends Users
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'user_id' => $this->user_id,
-            'level' => $this->level,
+            'id' => $this->id,
+            'course_id' => $this->course_id,
+            'teacher_id' => $this->teacher_id,
+            'time_start' => $this->time_start,
+            'time_end' => $this->time_end,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'password', $this->password])
-            ->andFilterWhere(['like', 'email', $this->email]);
-           
+        $query->andFilterWhere(['like', 'day', $this->day]);
 
         return $dataProvider;
     }
