@@ -8,7 +8,6 @@ use app\models\SearchTimetable;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\Courses;
 
 /**
  * TimetableController implements the CRUD actions for Timetable model.
@@ -36,18 +35,13 @@ class TimetableController extends Controller
      */
     public function actionIndex()
     {
-        $timetableData = Timetable::find()->all();
+        $searchModel = new SearchTimetable();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', ['timetableData' => $timetableData]);
-    }
-
-    public function actionGenerate()
-    {
-        $timetableModel = new Timetable();
-        $timetableModel->generateTimetable();
-
-        Yii::$app->session->setFlash('success', 'Timetable generated successfully.');
-        return $this->redirect(['index']);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -73,7 +67,7 @@ class TimetableController extends Controller
         $model = new Timetable();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->timetable_id]);
         }
 
         return $this->render('create', [
@@ -93,7 +87,7 @@ class TimetableController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->timetable_id]);
         }
 
         return $this->render('update', [

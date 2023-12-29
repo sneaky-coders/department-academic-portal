@@ -195,6 +195,79 @@
                     ]
                 );
 
+
+                echo dmstr\widgets\Menu::widget(
+                    [
+                        'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                        'items' => [
+                            [
+                                'label' => 'Faculty Allotment',
+                                'icon' => 'bug',
+                                'url' => '#',
+                                'items' => [
+                                   
+                                    ['label' => 'Subject Allotment', 'icon' => 'circle-o', 'url' => ['/faculty-allotment/create'],],
+                                    ['label' => 'View Allotment', 'icon' => 'circle-o', 'url' => ['/faculty-allotment'],],
+
+
+
+
+                                ],
+                            ],
+                        ],
+                    ]
+                );
+
+
+                echo dmstr\widgets\Menu::widget(
+                    [
+                        'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                        'items' => [
+                            [
+                                'label' => 'Week Days',
+                                'icon' => 'bug',
+                                'url' => '#',
+                                'items' => [
+                                   
+                                    ['label' => 'Add Days', 'icon' => 'circle-o', 'url' => ['/day/create'],],
+                                    ['label' => 'View Records', 'icon' => 'circle-o', 'url' => ['/day'],],
+
+
+
+
+                                ],
+                            ],
+                        ],
+                    ]
+                );
+
+
+               
+
+               
+
+                echo dmstr\widgets\Menu::widget(
+                    [
+                        'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                        'items' => [
+                            [
+                                'label' => 'Semester',
+                                'icon' => 'bug',
+                                'url' => '#',
+                                'items' => [
+                                   
+                                    ['label' => 'Add Semester', 'icon' => 'circle-o', 'url' => ['/semester/create'],],
+                                    ['label' => 'View Record', 'icon' => 'circle-o', 'url' => ['/semester'],],
+
+
+
+
+                                ],
+                            ],
+                        ],
+                    ]
+                );
+
                 
                
                 

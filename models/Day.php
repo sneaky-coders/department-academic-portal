@@ -5,23 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "docs".
+ * This is the model class for table "day".
  *
- * @property int $id
- * @property string $TT
- * @property string $LP
- * @property string $CP
+ * @property int $day_id
+ * @property string|null $day_name
  * @property string $created_at
  * @property string|null $updated_at
+ *
+ * @property Timetable[] $timetables
  */
-class Docs extends \yii\db\ActiveRecord
+class Day extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'docs';
+        return 'day';
     }
 
     /**
@@ -30,9 +30,8 @@ class Docs extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['TT', 'LP', 'CP'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
-            [['TT', 'LP', 'CP'], 'string', 'max' => 100],
+            [['day_name'], 'string', 'max' => 255],
         ];
     }
 
@@ -42,12 +41,20 @@ class Docs extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'TT' => 'Time Table',
-            'LP' => 'Lecture Plan',
-            'CP' => 'Course Documents',
+            'day_id' => 'Day ID',
+            'day_name' => 'Day Name',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * Gets query for [[Timetables]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTimetables()
+    {
+        return $this->hasMany(Timetable::className(), ['day_id' => 'day_id']);
     }
 }

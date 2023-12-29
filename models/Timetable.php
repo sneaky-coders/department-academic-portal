@@ -1,85 +1,132 @@
 <?php
+
 namespace app\models;
 
 use Yii;
-use yii\db\ActiveRecord;
-use app\models\Courses;
 
-class Timetable extends ActiveRecord
+/**
+ * This is the model class for table "timetable".
+ *
+ * @property int $timetable_id
+ * @property int|null $course_id
+ * @property int $subject_id
+ * @property int|null $faculty_id
+ * @property int|null $room_id
+ * @property int|null $time_slot_id
+ * @property int|null $day_id
+ * @property string $created_at
+ * @property string|null $updated_at
+ *
+ * @property Faculty $faculty
+ * @property Semester $course
+ * @property Courses $subject
+ * @property Day $day
+ * @property Timeslot $timeSlot
+ * @property Room $room
+ */
+class Timetable extends \yii\db\ActiveRecord
 {
-    public function generateTimetable()
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
     {
-        // Get all courses
-        $courses = Courses::find()->all();
-
-        // Iterate through each course
-        foreach ($courses as $course) {
-            // Calculate the number of lectures based on credits
-            $lecturesPerWeek = $this->calculateLectures($course->credits);
-
-            if ($lecturesPerWeek > 0) {
-                // Generate timetable entries
-                for ($i = 0; $i < $lecturesPerWeek; $i++) {
-                    $timetableEntry = new Timetable();
-                    $timetableEntry->course_id = $course->id;
-
-                    // Set other attributes such as teacher, day, time, etc.
-                    $this->setTimetableEntryAttributes($timetableEntry);
-
-                    $timetableEntry->save();
-                }
-            }
-        }
+        return 'timetable';
     }
 
-    protected function calculateLectures($credits)
-    {
-        // Customize the logic based on your requirements
-        return $credits == 4 ? 4 : ($credits == 2 ? 2 : 0);
-    }
-
-    protected function setTimetableEntryAttributes($timetableEntry)
-    {
-        // Customize this method to set attributes such as teacher, day, time, etc.
-        // Example: $timetableEntry->teacher_id = $this->findAvailableTeacher();
-        // Example: $timetableEntry->day = $this->findAvailableDay();
-        // Example: $timetableEntry->time_start = $this->findAvailableTime();
-        // ...
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['course_id', 'teacher_id'], 'integer'],
-            [['day', 'time_start', 'time_end'], 'required'],
-            [['time_start', 'time_end', 'created_at', 'updated_at'], 'safe'],
-            [['day'], 'string', 'max' => 255],
-            [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Courses::className(), 'targetAttribute' => ['course_id' => 'id']],
-            [['teacher_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['teacher_id' => 'id']],
+            [['course_id', 'subject_id', 'faculty_id', 'room_id', 'time_slot_id', 'day_id'], 'integer'],
+            [['subject_id'], 'required'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['faculty_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['faculty_id' => 'id']],
+            [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Semester::className(), 'targetAttribute' => ['course_id' => 'id']],
+            [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Courses::className(), 'targetAttribute' => ['subject_id' => 'id']],
+            [['day_id'], 'exist', 'skipOnError' => true, 'targetClass' => Day::className(), 'targetAttribute' => ['day_id' => 'day_id']],
+            [['time_slot_id'], 'exist', 'skipOnError' => true, 'targetClass' => Timeslot::className(), 'targetAttribute' => ['time_slot_id' => 'time_slot_id']],
+            [['room_id'], 'exist', 'skipOnError' => true, 'targetClass' => Room::className(), 'targetAttribute' => ['room_id' => 'room_id']],
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'timetable_id' => 'Timetable ID',
             'course_id' => 'Course ID',
-            'teacher_id' => 'Teacher ID',
-            'day' => 'Day',
-            'time_start' => 'Time Start',
-            'time_end' => 'Time End',
+            'subject_id' => 'Subject ID',
+            'faculty_id' => 'Faculty ID',
+            'room_id' => 'Room ID',
+            'time_slot_id' => 'Time Slot ID',
+            'day_id' => 'Day ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
-    public function getCourse()
+    /**
+     * Gets query for [[Faculty]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFaculty()
     {
-        return $this->hasOne(Courses::className(), ['id' => 'course_id']);
+        return $this->hasOne(Faculty::className(), ['id' => 'faculty_id']);
     }
 
-    public function getTeacher()
+    /**
+     * Gets query for [[Course]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCourse()
     {
-        return $this->hasOne(Faculty::className(), ['id' => 'teacher_id']);
+        return $this->hasOne(Semester::className(), ['id' => 'course_id']);
+    }
+
+    /**
+     * Gets query for [[Subject]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSubject()
+    {
+        return $this->hasOne(Courses::className(), ['id' => 'subject_id']);
+    }
+
+    /**
+     * Gets query for [[Day]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDay()
+    {
+        return $this->hasOne(Day::className(), ['day_id' => 'day_id']);
+    }
+
+    /**
+     * Gets query for [[TimeSlot]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTimeSlot()
+    {
+        return $this->hasOne(Timeslot::className(), ['time_slot_id' => 'time_slot_id']);
+    }
+
+    /**
+     * Gets query for [[Room]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRoom()
+    {
+        return $this->hasOne(Room::className(), ['room_id' => 'room_id']);
     }
 }

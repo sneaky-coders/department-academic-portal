@@ -3,18 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Faculty;
-use app\models\Users;
-use app\models\SearchFaculty;
+use app\models\Semester;
+use app\models\SearchSemester;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\Response;
 
 /**
- * FacultyController implements the CRUD actions for Faculty model.
+ * SemesterController implements the CRUD actions for Semester model.
  */
-class FacultyController extends Controller
+class SemesterController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,12 +30,12 @@ class FacultyController extends Controller
     }
 
     /**
-     * Lists all Faculty models.
+     * Lists all Semester models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SearchFaculty();
+        $searchModel = new SearchSemester();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -47,7 +45,7 @@ class FacultyController extends Controller
     }
 
     /**
-     * Displays a single Faculty model.
+     * Displays a single Semester model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -60,13 +58,13 @@ class FacultyController extends Controller
     }
 
     /**
-     * Creates a new Faculty model.
+     * Creates a new Semester model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Faculty();
+        $model = new Semester();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -77,31 +75,8 @@ class FacultyController extends Controller
         ]);
     }
 
-    public function actionGetUserDetails($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        try {
-            // Fetch user details based on the provided user ID
-            $user = Users::findOne($id);
-
-            if ($user !== null) {
-                return [
-                    'name' => $user->username,
-                    'email' => $user->email,
-                    'contact' => $user->contact,
-                    // Add or remove attributes as needed
-                ];
-            } else {
-                return ['error' => 'User not found'];
-            }
-        } catch (\Exception $e) {
-            Yii::error('Error fetching user details: ' . $e->getMessage(), 'faculty');
-            return ['error' => 'An error occurred while fetching user details'];
-        }
-    }
     /**
-     * Updates an existing Faculty model.
+     * Updates an existing Semester model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -121,7 +96,7 @@ class FacultyController extends Controller
     }
 
     /**
-     * Deletes an existing Faculty model.
+     * Deletes an existing Semester model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -135,15 +110,15 @@ class FacultyController extends Controller
     }
 
     /**
-     * Finds the Faculty model based on its primary key value.
+     * Finds the Semester model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Faculty the loaded model
+     * @return Semester the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Faculty::findOne($id)) !== null) {
+        if (($model = Semester::findOne($id)) !== null) {
             return $model;
         }
 

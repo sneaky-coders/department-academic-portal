@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Timetable;
+use app\models\Semester;
 
 /**
- * SearchTimetable represents the model behind the search form of `app\models\Timetable`.
+ * SearchSemester represents the model behind the search form of `app\models\Semester`.
  */
-class SearchTimetable extends Timetable
+class SearchSemester extends Semester
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class SearchTimetable extends Timetable
     public function rules()
     {
         return [
-            [['timetable_id', 'course_id', 'subject_id', 'faculty_id', 'room_id', 'time_slot_id', 'day_id'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['id'], 'integer'],
+            [['name', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class SearchTimetable extends Timetable
      */
     public function search($params)
     {
-        $query = Timetable::find();
+        $query = Semester::find();
 
         // add conditions that should always apply here
 
@@ -58,16 +58,12 @@ class SearchTimetable extends Timetable
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'timetable_id' => $this->timetable_id,
-            'course_id' => $this->course_id,
-            'subject_id' => $this->subject_id,
-            'faculty_id' => $this->faculty_id,
-            'room_id' => $this->room_id,
-            'time_slot_id' => $this->time_slot_id,
-            'day_id' => $this->day_id,
+            'id' => $this->id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

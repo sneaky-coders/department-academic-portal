@@ -21,26 +21,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             //'user_id',
-            [
-                'attribute'=>'',
-                'value'=> Yii::$app->request->baseUrl.'/uploads/'.$model->profile,
-                'format' => ['image'],
-             ],
             'username',
             'password',
             'email:email',
-            'usn',
-            'batch',
-            'ismentor',
-            'hasMentor',
-            'xcgpa',
-            'xiicgpa',
-            'bachelorcgpa',
-            'sem1cgpa',
-            'sem2cgpa',
-            'sem3cgpa',
-            'sem4cgpa',
-            'mentor_id',
+           'contact',
            
 
             'level',

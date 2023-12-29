@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'TT',
                 'format'=>'raw',
-                'label' => 'Completion Certificate',
+                'label' => 'Time Table',
                 'value' => function($data)
                 {
                 return
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                 'attribute'=>'LP',
                 'format'=>'raw',
-                'label' => 'Completion Certificate',
+                'label' => 'Lecture Plan',
                 'value' => function($data)
                 {
                 return
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                 'attribute'=>'CP',
                 'format'=>'raw',
-                'label' => 'Completion Certificate',
+                'label' => 'Course Documents',
                 'value' => function($data)
                 {
                 return

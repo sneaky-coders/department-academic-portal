@@ -12,7 +12,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'semester')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'semester')->dropDownList(
+        ['1' => 'Semester 1', '2' => 'Semester 2', '3' => 'Semester 3', '4' => 'Semester 4'],
+        ['prompt' => 'Select Semester']
+    ) ?>
 
     <?= $form->field($model, 'coursename')->textInput(['maxlength' => true]) ?>
 
@@ -20,9 +23,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'credits')->textInput() ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
 
-    <?= $form->field($model, 'updated_at')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

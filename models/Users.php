@@ -27,12 +27,12 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'email', 'usn', 'xcgpa', 'xiicgpa', 'bachelorcgpa', 'sem1cgpa', 'profile', 'level'], 'required'],
-            [['batch', 'mentor_id', 'level'], 'integer'],
-            [['xcgpa', 'xiicgpa', 'bachelorcgpa', 'sem1cgpa', 'sem2cgpa', 'sem3cgpa', 'sem4cgpa'], 'double'],
+            [['username', 'password', 'email', 'level'], 'required'],
+            [[ 'level', 'contact'], 'integer'],
+           
             [['created_at', 'updated_at'], 'safe'],
-            [['username', 'password', 'email', 'usn', 'profile'], 'string', 'max' => 100],
-            [['ismentor', 'hasMentor'], 'string', 'max' => 20],
+            [['username', 'password', 'email'], 'string', 'max' => 100],
+         
         ];
     }
 
@@ -46,19 +46,8 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'username' => 'Username',
             'password' => 'Password',
             'email' => 'Email',
-            'usn' => 'Usn',
-            'batch' => 'Batch',
-            'ismentor' => 'Ismentor',
-            'hasMentor' => 'Has Mentor',
-            'xcgpa' => 'Xcgpa',
-            'xiicgpa' => 'Xiicgpa',
-            'bachelorcgpa' => 'Bachelorcgpa',
-            'sem1cgpa' => 'Sem1cgpa',
-            'sem2cgpa' => 'Sem2cgpa',
-            'sem3cgpa' => 'Sem3cgpa',
-            'sem4cgpa' => 'Sem4cgpa',
-            'mentor_id' => 'Mentor ID',
-            'profile' => 'Profile',
+            'contact' => 'Phone Number',
+           
             'level' => 'Level',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -102,33 +91,5 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->password === $password;
     }
 
-    public function getInternships()
-    {
-        return $this->hasMany(Internship::className(), ['user_id' => 'user_id']);
-    }
-
-    /**
-     * Gets query for [[Profiles]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProfiles()
-    {
-        return $this->hasMany(Profile::className(), ['user_id' => 'user_id']);
-    }
-
-    /**
-     * Gets query for [[Set2s]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSet2s()
-    {
-        return $this->hasMany(Set2::className(), ['user_id' => 'user_id']);
-    }
-
-    public function getMentor()
-    {
-        return $this->hasOne(Mentor::className(), ['id' => 'mentor_id']);
-    }
+   
 }

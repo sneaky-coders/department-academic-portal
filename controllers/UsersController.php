@@ -101,19 +101,9 @@ class UsersController extends Controller
      */
     public function actionView($id)
     {
-        if (!Yii::$app->user->isGuest) 
-        {
-            
-                return $this->render('view', [
-                    'model' => $this->findModel($id),
-                ]);
-            
-           
-        }
-        else
-        {
-            return $this->redirect(['/site/login']);
-        }
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
        
     }
 /*
@@ -221,36 +211,15 @@ class UsersController extends Controller
      */
     public function actionCreate()
     {
-        if(!Yii::$app->user->isGuest)
-        {
-            if(Yii::$app->user->identity->level!=3)
-            {
-                $model = new Users();
+        $model = new Users();
 
-                if ($model->load(Yii::$app->request->post()) ) {
-                    $model->profile = UploadedFile::getInstance($model, 'profile');
-                    $filename = 'profile'.$usn . '.' . $model->profile->extension;
-                    $model->profile->saveAs('uploads/' . $filename);
-                    $model->profile = $filename;
-                    $model->save();
-                
-                    return $this->redirect(['view', 'id' => $model->user_id]);
-                }
-        
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
-            else
-            {
-                throw new NotFoundHttpException('The requested page does not exist.');
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
-        else
-        {
-            return $this->redirect(['/site/login']);
-        }
-       
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -262,31 +231,15 @@ class UsersController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(!Yii::$app->user->isGuest)
-        {
-           
-                $model = $this->findModel($id);
-                $usn = Yii::$app->user->identity->usn;
-                if ($model->load(Yii::$app->request->post()) ) {
-                    $model->profile = UploadedFile::getInstance($model, 'profile');
-                    $filename = 'profile'.$usn . '.' . $model->profile->extension;
-                    $model->profile->saveAs('uploads/' . $filename);
-                    $model->profile = $filename;
-                    $model->save();
-                 
-                    return $this->redirect(['view', 'id' => $model->user_id]);
-                }
-        
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-           
-       
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
-        else
-        {
-            return $this->redirect(['/site/login']);
-        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**

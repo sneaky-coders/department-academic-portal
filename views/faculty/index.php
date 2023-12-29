@@ -21,23 +21,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'user_id',
-            'name',
-            'email:email',
-            'contact',
-            //'staffid',
-            //'created_at',
-            //'updated_at',
-
-            ['class' => 'yii\grid\ActionColumn'],
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+        
+        [
+            'attribute' => 'user_id',
+            'label' => 'Username', // Set the custom label here
+            'value' => function ($model) {
+                // Use the appropriate attribute to fetch and display the username
+                return $model->user->username; // Assuming a relation with the User model
+            },
         ],
-    ]); ?>
+        'name',
+        'email:email',
+        'contact',
+        // ... other columns
+        ['class' => 'yii\grid\ActionColumn'],
+    ],
+]); ?>
+
 
 
 </div>

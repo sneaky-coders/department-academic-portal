@@ -50,7 +50,7 @@ class Faculty extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
+            'user_id' => 'Username',
             'name' => 'Name',
             'email' => 'Email',
             'contact' => 'Contact',
