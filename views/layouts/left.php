@@ -27,48 +27,131 @@
        
     echo dmstr\widgets\Menu::widget(
         [
-            'options' => ['class' => 'sidebar-menu tree'],
-            'items' => [['label' => 'Daily Operations', 'icon' => 'circle-o', 'url' => ['/operation'],],
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+            'items' => [
+                [
+                    'label' => 'Elective Enrollment',
+                    'icon' => 'book',
+                    'url' => '#',
+                    'items' => [
+                        ['label' => 'Enroll', 'icon' => 'circle-o', 'url' => ['/electiveenrollment/create'],],
+                        ['label' => 'View Enrolled', 'icon' => 'circle-o', 'url' => ['/electiveenrollment'],],
+
+
+
+
+                    ],
+                ],
             ],
         ]
         );
     
     echo dmstr\widgets\Menu::widget(
         [
-             'options' => ['class' => 'sidebar-menu tree'],
-            'items' => [['label' => 'Purchase Contract', 'icon' => 'circle-o', 'url' => ['/purchase-contract'],],
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+            'items' => [
+                [
+                    'label' => 'Academic Documents',
+                    'icon' => 'building',
+                    'url' => '#',
+                    'items' => [
+                       
+                        ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/docs/create'],],
+                        ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/docs'],],
+
+
+
+
+                    ],
+                ],
             ],
         ]
         );    
 
     echo dmstr\widgets\Menu::widget(
         [
-             'options' => ['class' => 'sidebar-menu tree'],
-            'items' => [['label' => 'Consumables', 'icon' => 'circle-o', 'url' => ['/consumables'],],
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+            'items' => [
+                [
+                    'label' => 'Students',
+                    'icon' => 'users',
+                    'url' => '#',
+                    'items' => [
+                       
+                        ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/students/create'],],
+                        ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/students'],],
+
+
+
+
+                    ],
+                ],
             ],
         ]
         );
 
     echo dmstr\widgets\Menu::widget(
         [
-             'options' => ['class' => 'sidebar-menu tree'],
-            'items' => [['label' => 'Consumption', 'icon' => 'circle-o', 'url' => ['/consumption'],],
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+            'items' => [
+                [
+                    'label' => 'Faculties',
+                    'icon' => 'user',
+                    'url' => '#',
+                    'items' => [
+                       
+                        ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/faculty/create'],],
+                        ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/faculty'],],
+
+
+
+
+                    ],
+                ],
             ],
         ]
         );
 
     echo dmstr\widgets\Menu::widget(
         [
-            'options' => ['class' => 'sidebar-menu tree'],
-            'items' => [['label' => 'Production', 'icon' => 'circle-o', 'url' => ['/production'],],
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+            'items' => [
+                [
+                    'label' => 'Courses',
+                    'icon' => 'book',
+                    'url' => '#',
+                    'items' => [
+                       
+                        ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/courses/create'],],
+                        ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/courses'],],
+
+
+
+
+                    ],
+                ],
             ],
         ]
         );
 
     echo dmstr\widgets\Menu::widget(
         [
-             'options' => ['class' => 'sidebar-menu tree'],
-            'items' => [['label' => 'Sales Contract', 'icon' => 'circle-o', 'url' => ['/sales-contract'],],
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+            'items' => [
+                [
+                    'label' => 'Timetable',
+                    'icon' => 'circle-o',
+                    'url' => '#',
+                    'items' => [
+                       
+                        ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/timetable/create'],],
+                        ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/timetable'],],
+
+
+
+
+                    ],
+                ],
             ],
         ]
         );
@@ -76,8 +159,22 @@
 
     echo dmstr\widgets\Menu::widget(
         [
-             'options' => ['class' => 'sidebar-menu tree'],
-            'items' => [['label' => 'Dispatch', 'icon' => 'circle-o', 'url' => ['/dispatch'],],
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+            'items' => [
+                [
+                    'label' => 'Faculty Allotment',
+                    'icon' => 'circle-o',
+                    'url' => '#',
+                    'items' => [
+                       
+                        ['label' => 'Subject Allotment', 'icon' => 'circle-o', 'url' => ['/faculty-allotment/create'],],
+                        ['label' => 'View Allotment', 'icon' => 'circle-o', 'url' => ['/faculty-allotment'],],
+
+
+
+
+                    ],
+                ],
             ],
         ]
         );
@@ -85,15 +182,43 @@
     
     echo dmstr\widgets\Menu::widget(
         [
-             'options' => ['class' => 'sidebar-menu tree'],
-            'items' => [['label' => 'Daily Works/Jobs', 'icon' => 'circle-o', 'url' => ['/daily-works'],],
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+            'items' => [
+                [
+                    'label' => 'Week Days',
+                    'icon' => 'circle-o',
+                    'url' => '#',
+                    'items' => [
+                       
+                        ['label' => 'Add Days', 'icon' => 'circle-o', 'url' => ['/day/create'],],
+                        ['label' => 'View Records', 'icon' => 'circle-o', 'url' => ['/day'],],
+
+
+
+
+                    ],
+                ],
             ],
         ]
         );
     echo dmstr\widgets\Menu::widget(
         [
-             'options' => ['class' => 'sidebar-menu tree'],
-            'items' => [['label' => 'Maintenance', 'icon' => 'circle-o', 'url' => ['/maintenance'],],
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+            'items' => [
+                [
+                    'label' => 'Semester',
+                    'icon' => 'circle-o',
+                    'url' => '#',
+                    'items' => [
+                       
+                        ['label' => 'Add Semester', 'icon' => 'circle-o', 'url' => ['/semester/create'],],
+                        ['label' => 'View Record', 'icon' => 'circle-o', 'url' => ['/semester'],],
+
+
+
+
+                    ],
+                ],
             ],
         ]
         );
@@ -109,9 +234,8 @@
                         'icon' => 'bar-chart',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Maintenance', 'icon' => 'circle-o', 'url' => ['/maintenance/report'],],
-                            ['label' => 'Daily Works/Jobs', 'icon' => 'circle-o', 'url' => ['/daily-works/report'],],
-                            ['label' => 'Dispatch', 'icon' => 'circle-o', 'url' => ['/dispatch/report'],],
+                            ['label' => 'Maintenance', 'icon' => 'circle-o', 'url' => ['#'],],
+                            
                            
                           
                         ],
@@ -131,15 +255,7 @@
                         'icon' => 'cog',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Machine', 'icon' => 'circle-o', 'url' => ['/machine'],],
-                            ['label' => 'Product', 'icon' => 'circle-o', 'url' => ['/product'],],
-                            ['label' => 'Raw Material', 'icon' => 'circle-o', 'url' => ['/raw-material'],],
-                            ['label' => 'Buyer', 'icon' => 'circle-o', 'url' => ['/buyer'],],
-                            ['label' => 'Supplier', 'icon' => 'circle-o', 'url' => ['/supplier'],],
-                            ['label' => 'Mine Location', 'icon' => 'circle-o', 'url' => ['/mine-location'],],
-                            ['label' => 'Units', 'icon' => 'circle-o', 'url' => ['/units'],],
-                            ['label' => 'Currency', 'icon' => 'circle-o', 'url' => ['/currency'],],
-                            ['label' => 'Equipment', 'icon' => 'circle-o', 'url' => ['/equipment'],],
+                      
                             ['label' => 'Users', 'icon' => 'circle-o', 'url' => ['/users'],],
                           
                         ],

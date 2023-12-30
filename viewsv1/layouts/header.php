@@ -8,7 +8,7 @@ use app\models\Users;
 
 <header class="main-header">
 
-    <?= Html::a('<span class="logo-mini">BO</span><span class="logo-lg">' .'Blue Ocean' . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
+    <?= Html::a('<span class="logo-mini">BO</span><span class="logo-lg">' .'Academic Portal' . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
 
     <nav class="navbar navbar-static-top" role="navigation">
 

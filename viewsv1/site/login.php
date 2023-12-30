@@ -26,7 +26,7 @@ $fieldOptions2 = [
     <!-- /.login-logo -->
     <div class="login-box-body">
         <div class="text-center">
-            <a href="#" class="login-box-msg" style="font-size: 24px;"><b>Blue Ocean</b></a>
+            <a href="#" class="login-box-msg" style="font-size: 24px;"><b>Academic Portal</b></a>
         </div>
         <br>
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
