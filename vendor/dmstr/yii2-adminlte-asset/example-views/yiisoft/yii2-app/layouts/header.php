@@ -266,12 +266,6 @@ use yii\helpers\Html;
                                     ['/site/logout'],
                                     ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']
                                 ) ?>
-
-<?= Html::a(
-                                    'Change Password',
-                                    ['/users/change-password'],
-                                    ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']
-                                ) ?>
                             </div>
                         </li>
                     </ul>

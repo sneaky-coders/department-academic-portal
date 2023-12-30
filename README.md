@@ -15,7 +15,7 @@ features to your application.
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
 [![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![build](https://github.com/yiisoft/yii2-app-basic/workflows/build/badge.svg)](https://github.com/yiisoft/yii2-app-basic/actions?query=workflow%3Abuild)
+[![Build Status](https://travis-ci.com/yiisoft/yii2-app-basic.svg?branch=master)](https://travis-ci.com/yiisoft/yii2-app-basic)
 
 DIRECTORY STRUCTURE
 -------------------
@@ -132,7 +132,7 @@ TESTING
 -------
 
 Tests are located in `tests` directory. They are developed with [Codeception PHP Testing Framework](http://codeception.com/).
-By default, there are 3 test suites:
+By default there are 3 test suites:
 
 - `unit`
 - `functional`
@@ -155,7 +155,7 @@ To execute acceptance tests do the following:
 
 1. Rename `tests/acceptance.suite.yml.example` to `tests/acceptance.suite.yml` to enable suite configuration
 
-2. Replace `codeception/base` package in `composer.json` with `codeception/codeception` to install full-featured
+2. Replace `codeception/base` package in `composer.json` with `codeception/codeception` to install full featured
    version of Codeception
 
 3. Update dependencies with Composer 
@@ -186,7 +186,7 @@ To execute acceptance tests do the following:
     docker run --net=host selenium/standalone-firefox:2.53.0
     ```
 
-5. (Optional) Create `yii2basic_test` database and update it by applying migrations if you have them.
+5. (Optional) Create `yii2_basic_tests` database and update it by applying migrations if you have them.
 
    ```
    tests/bin/yii migrate
@@ -221,13 +221,13 @@ to collect code coverage. You can run your tests and collect coverage with the f
 
 ```
 #collect coverage for all tests
-vendor/bin/codecept run --coverage --coverage-html --coverage-xml
+vendor/bin/codecept run -- --coverage-html --coverage-xml
 
 #collect coverage only for unit tests
-vendor/bin/codecept run unit --coverage --coverage-html --coverage-xml
+vendor/bin/codecept run unit -- --coverage-html --coverage-xml
 
 #collect coverage for unit and functional tests
-vendor/bin/codecept run functional,unit --coverage --coverage-html --coverage-xml
+vendor/bin/codecept run functional,unit -- --coverage-html --coverage-xml
 ```
 
 You can see code coverage output under the `tests/_output` directory.

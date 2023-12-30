@@ -11,17 +11,10 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    
     'components' => [
-        
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - thism is required by cookie validation
-            'cookieValidationKey' => 'lBrtM8pbt1ozTAw2TqvzfuYx8C5J_Wa7',
-        ],
-        'db' => $db,
-        'authManager'  => [
-            'class'        => 'yii\rbac\DbManager',
-            //            'defaultRoles' => ['guest'],
+            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
+            'cookieValidationKey' => 'blueocean',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -34,16 +27,11 @@ $config = [
             'errorAction' => 'site/error',
         ],
         'mailer' => [
-           'class' => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => false,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.gmail.com',
-                'username' => 'spslzam@gmail.com',
-                'password' => 'swexvqgyahonaymr',
-                'port' => '587',
-                'encryption' => 'tls',
-            ],
+            'class' => 'yii\swiftmailer\Mailer',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => true,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -60,30 +48,21 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'faculty/search' => 'faculty/search',
-                'faculty/locate/<facultyId:\d+>' => 'faculty/locate',
-                'faculty/search-form' => 'faculty/search-form',
-                'batch-input' => 'allotment/batch-input-form',
-                
             ],
         ],
-
-        'controllerNamespace' => 'app\controllers',
         
-        
-    ],
-    'modules' => [
-
-        'gridview' => ['class' => 'kartik\grid\Module']
     ],
     'params' => $params,
-    
-    
 ];
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
-  
+    $config['bootstrap'][] = 'debug';
+    $config['modules']['debug'] = [
+        'class' => 'yii\debug\Module',
+        // uncomment the following to add your IP if you are not connecting from localhost.
+        //'allowedIPs' => ['127.0.0.1', '::1'],
+    ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [

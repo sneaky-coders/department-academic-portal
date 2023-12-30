@@ -14,7 +14,6 @@ $config = [
         '@tests' => '@app/tests',
     ],
     'components' => [
-        
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
@@ -27,11 +26,7 @@ $config = [
             ],
         ],
         'db' => $db,
-        'authManager'  => [
-            'class'        => 'yii\rbac\DbManager',
-            //            'defaultRoles' => ['guest'],
     ],
-],
     'params' => $params,
     /*
     'controllerMap' => [
