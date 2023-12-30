@@ -17,6 +17,8 @@ use Yii;
  * @property string|null $updated_at
  *
  * @property Users $user
+ * @property Facultyallotment[] $facultyallotments
+ * @property Timetable[] $timetables
  */
 class Faculty extends \yii\db\ActiveRecord
 {
@@ -50,7 +52,7 @@ class Faculty extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'Username',
+            'user_id' => 'User ID',
             'name' => 'Name',
             'email' => 'Email',
             'contact' => 'Contact',
@@ -69,4 +71,31 @@ class Faculty extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
     }
+
+    /**
+     * Gets query for [[Facultyallotments]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFacultyallotments()
+    {
+        return $this->hasMany(Facultyallotment::className(), ['faculty_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Timetables]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTimetables()
+    {
+        return $this->hasMany(Timetable::className(), ['faculty_id' => 'id']);
+    }
+
+    public function getFaculty()
+    {
+        return $this->hasOne(Faculty::class, ['id' => 'faculty_id']);
+    }
+
+    
 }

@@ -14,6 +14,9 @@ use Yii;
  * @property int $credits
  * @property string $created_at
  * @property string|null $updated_at
+ *
+ * @property Facultyallotment[] $facultyallotments
+ * @property Timetable[] $timetables
  */
 class Courses extends \yii\db\ActiveRecord
 {
@@ -54,5 +57,25 @@ class Courses extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * Gets query for [[Facultyallotments]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFacultyallotments()
+    {
+        return $this->hasMany(Facultyallotment::className(), ['course_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Timetables]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTimetables()
+    {
+        return $this->hasMany(Timetable::className(), ['subject_id' => 'id']);
     }
 }

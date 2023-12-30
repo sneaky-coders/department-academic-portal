@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'subject_id',
             'faculty_id',
             'room_id',
-            //'time_slot_id:datetime',
+            //'timeslot:datetime',
             //'day_id',
             //'created_at',
             //'updated_at',

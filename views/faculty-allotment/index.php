@@ -27,9 +27,35 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'faculty_id',
-            'course_id',
+            [
+                'label' => 'Faculty',
+                'attribute' => 'user_id',
+                'value' => function ($model) {
+                    return $model->faculty->name; // Assuming 'user' is the relation to the users table
+                },
+            ],
+            [
+                'label' => 'Course',
+                'attribute' => 'user_id',
+                'value' => function ($model) {
+                    return $model->course->coursename; // Assuming 'user' is the relation to the users table
+                },
+            ],
+            [
+                'label' => 'Course COde',
+                'attribute' => 'user_id',
+                'value' => function ($model) {
+                    return $model->course->coursecode; // Assuming 'user' is the relation to the users table
+                },
+            ],
             'semster',
+            [
+                'label' => 'Credits',
+                'attribute' => 'user_id',
+                'value' => function ($model) {
+                    return $model->course->credits; // Assuming 'user' is the relation to the users table
+                },
+            ],
             'created_at',
             //'updated_at',
 

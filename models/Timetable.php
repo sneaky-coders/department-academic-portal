@@ -12,7 +12,7 @@ use Yii;
  * @property int $subject_id
  * @property int|null $faculty_id
  * @property int|null $room_id
- * @property int|null $time_slot_id
+ * @property int|null $timeslot
  * @property int|null $day_id
  * @property string $created_at
  * @property string|null $updated_at
@@ -21,8 +21,6 @@ use Yii;
  * @property Semester $course
  * @property Courses $subject
  * @property Day $day
- * @property Timeslot $timeSlot
- * @property Room $room
  */
 class Timetable extends \yii\db\ActiveRecord
 {
@@ -40,15 +38,13 @@ class Timetable extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['course_id', 'subject_id', 'faculty_id', 'room_id', 'time_slot_id', 'day_id'], 'integer'],
+            [['course_id', 'subject_id', 'faculty_id', 'room_id', 'timeslot', 'day_id'], 'integer'],
             [['subject_id'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
             [['faculty_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['faculty_id' => 'id']],
             [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Semester::className(), 'targetAttribute' => ['course_id' => 'id']],
             [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Courses::className(), 'targetAttribute' => ['subject_id' => 'id']],
             [['day_id'], 'exist', 'skipOnError' => true, 'targetClass' => Day::className(), 'targetAttribute' => ['day_id' => 'day_id']],
-            [['time_slot_id'], 'exist', 'skipOnError' => true, 'targetClass' => Timeslot::className(), 'targetAttribute' => ['time_slot_id' => 'time_slot_id']],
-            [['room_id'], 'exist', 'skipOnError' => true, 'targetClass' => Room::className(), 'targetAttribute' => ['room_id' => 'room_id']],
         ];
     }
 
@@ -63,7 +59,7 @@ class Timetable extends \yii\db\ActiveRecord
             'subject_id' => 'Subject ID',
             'faculty_id' => 'Faculty ID',
             'room_id' => 'Room ID',
-            'time_slot_id' => 'Time Slot ID',
+            'timeslot' => 'Timeslot',
             'day_id' => 'Day ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -108,25 +104,5 @@ class Timetable extends \yii\db\ActiveRecord
     public function getDay()
     {
         return $this->hasOne(Day::className(), ['day_id' => 'day_id']);
-    }
-
-    /**
-     * Gets query for [[TimeSlot]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTimeSlot()
-    {
-        return $this->hasOne(Timeslot::className(), ['time_slot_id' => 'time_slot_id']);
-    }
-
-    /**
-     * Gets query for [[Room]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRoom()
-    {
-        return $this->hasOne(Room::className(), ['room_id' => 'room_id']);
     }
 }

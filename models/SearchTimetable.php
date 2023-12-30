@@ -17,7 +17,7 @@ class SearchTimetable extends Timetable
     public function rules()
     {
         return [
-            [['timetable_id', 'course_id', 'subject_id', 'faculty_id', 'room_id', 'time_slot_id', 'day_id'], 'integer'],
+            [['timetable_id', 'course_id', 'subject_id', 'faculty_id', 'room_id', 'timeslot', 'day_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
         ];
     }
@@ -63,7 +63,7 @@ class SearchTimetable extends Timetable
             'subject_id' => $this->subject_id,
             'faculty_id' => $this->faculty_id,
             'room_id' => $this->room_id,
-            'time_slot_id' => $this->time_slot_id,
+            'timeslot' => $this->timeslot,
             'day_id' => $this->day_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
