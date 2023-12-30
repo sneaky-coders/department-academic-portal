@@ -15,19 +15,25 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'timetable_id') ?>
+    <?= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'course_id') ?>
 
     <?= $form->field($model, 'subject_id') ?>
 
-    <?= $form->field($model, 'faculty_id') ?>
+    <?= $form->field($model, 'labsession') ?>
 
-    <?= $form->field($model, 'room_id') ?>
+    <?= $form->field($model, 'faculty_id1') ?>
+
+    <?php // echo $form->field($model, 'faculty_id2') ?>
+
+    <?php // echo $form->field($model, 'faculty_id3') ?>
+
+    <?php // echo $form->field($model, 'room') ?>
 
     <?php // echo $form->field($model, 'timeslot') ?>
 
-    <?php // echo $form->field($model, 'day_id') ?>
+    <?php // echo $form->field($model, 'day') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 

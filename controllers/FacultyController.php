@@ -4,10 +4,12 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Faculty;
+use app\models\Users;
 use app\models\SearchFaculty;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * FacultyController implements the CRUD actions for Faculty model.
@@ -75,6 +77,29 @@ class FacultyController extends Controller
         ]);
     }
 
+    public function actionGetUserDetails($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        try {
+            // Fetch user details based on the provided user ID
+            $user = Users::findOne($id);
+
+            if ($user !== null) {
+                return [
+                    'name' => $user->username,
+                    'email' => $user->email,
+                    'contact' => $user->contact,
+                    // Add or remove attributes as needed
+                ];
+            } else {
+                return ['error' => 'User not found'];
+            }
+        } catch (\Exception $e) {
+            Yii::error('Error fetching user details: ' . $e->getMessage(), 'faculty');
+            return ['error' => 'An error occurred while fetching user details'];
+        }
+    }
     /**
      * Updates an existing Faculty model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -107,30 +132,6 @@ class FacultyController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-    }
-
-    public function actionGetUserDetails($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        try {
-            // Fetch user details based on the provided user ID
-            $user = Users::findOne($id);
-
-            if ($user !== null) {
-                return [
-                    'name' => $user->username,
-                    'email' => $user->email,
-                    'contact' => $user->contact,
-                    // Add or remove attributes as needed
-                ];
-            } else {
-                return ['error' => 'User not found'];
-            }
-        } catch (\Exception $e) {
-            Yii::error('Error fetching user details: ' . $e->getMessage(), 'faculty');
-            return ['error' => 'An error occurred while fetching user details'];
-        }
     }
 
     /**

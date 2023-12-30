@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Timetable */
 
-$this->title = $model->timetable_id;
+$this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Timetables', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -16,8 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->timetable_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->timetable_id], [
+        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -29,13 +29,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'timetable_id:datetime',
+            'id',
             'course_id',
             'subject_id',
-            'faculty_id',
-            'room_id',
-            'timeslot:datetime',
-            'day_id',
+            'labsession',
+            'faculty_id1',
+            'faculty_id2',
+            'faculty_id3',
+            'room',
+            'timeslot',
+            'day',
             'created_at',
             'updated_at',
         ],

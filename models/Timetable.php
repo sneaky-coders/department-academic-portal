@@ -7,20 +7,23 @@ use Yii;
 /**
  * This is the model class for table "timetable".
  *
- * @property int $timetable_id
+ * @property int $id
  * @property int|null $course_id
  * @property int $subject_id
- * @property int|null $faculty_id
- * @property int|null $room_id
- * @property int|null $timeslot
- * @property int|null $day_id
+ * @property string $labsession
+ * @property int|null $faculty_id1
+ * @property int $faculty_id2
+ * @property int $faculty_id3
+ * @property string|null $room
+ * @property string|null $timeslot
+ * @property string|null $day
  * @property string $created_at
  * @property string|null $updated_at
  *
- * @property Faculty $faculty
- * @property Semester $course
+ * @property Faculty $facultyId1
  * @property Courses $subject
- * @property Day $day
+ * @property Faculty $facultyId2
+ * @property Faculty $facultyId3
  */
 class Timetable extends \yii\db\ActiveRecord
 {
@@ -38,13 +41,17 @@ class Timetable extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['course_id', 'subject_id', 'faculty_id', 'room_id', 'timeslot', 'day_id'], 'integer'],
+            [['course_id', 'subject_id', 'faculty_id1', 'faculty_id2', 'faculty_id3'], 'integer'],
             [['subject_id'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
-            [['faculty_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['faculty_id' => 'id']],
-            [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Semester::className(), 'targetAttribute' => ['course_id' => 'id']],
+            [['labsession'], 'string', 'max' => 10],
+            [['room'], 'string', 'max' => 50],
+            [['timeslot'], 'string', 'max' => 100],
+            [['day'], 'string', 'max' => 30],
+            [['faculty_id1'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['faculty_id1' => 'id']],
             [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Courses::className(), 'targetAttribute' => ['subject_id' => 'id']],
-            [['day_id'], 'exist', 'skipOnError' => true, 'targetClass' => Day::className(), 'targetAttribute' => ['day_id' => 'day_id']],
+            [['faculty_id2'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['faculty_id2' => 'id']],
+            [['faculty_id3'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['faculty_id3' => 'id']],
         ];
     }
 
@@ -54,36 +61,29 @@ class Timetable extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'timetable_id' => 'Timetable ID',
+            'id' => 'ID',
             'course_id' => 'Course ID',
             'subject_id' => 'Subject ID',
-            'faculty_id' => 'Faculty ID',
-            'room_id' => 'Room ID',
+            'labsession' => 'Labsession',
+            'faculty_id1' => 'Faculty Id1',
+            'faculty_id2' => 'Faculty Id2',
+            'faculty_id3' => 'Faculty Id3',
+            'room' => 'Room',
             'timeslot' => 'Timeslot',
-            'day_id' => 'Day ID',
+            'day' => 'Day',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
 
     /**
-     * Gets query for [[Faculty]].
+     * Gets query for [[FacultyId1]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getFaculty()
+    public function getFacultyId1()
     {
-        return $this->hasOne(Faculty::className(), ['id' => 'faculty_id']);
-    }
-
-    /**
-     * Gets query for [[Course]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCourse()
-    {
-        return $this->hasOne(Semester::className(), ['id' => 'course_id']);
+        return $this->hasOne(Faculty::className(), ['id' => 'faculty_id1']);
     }
 
     /**
@@ -97,12 +97,22 @@ class Timetable extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Day]].
+     * Gets query for [[FacultyId2]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getDay()
+    public function getFacultyId2()
     {
-        return $this->hasOne(Day::className(), ['day_id' => 'day_id']);
+        return $this->hasOne(Faculty::className(), ['id' => 'faculty_id2']);
+    }
+
+    /**
+     * Gets query for [[FacultyId3]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFacultyId3()
+    {
+        return $this->hasOne(Faculty::className(), ['id' => 'faculty_id3']);
     }
 }

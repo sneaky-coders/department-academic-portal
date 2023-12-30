@@ -67,7 +67,7 @@ class TimetableController extends Controller
         $model = new Timetable();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->timetable_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -87,11 +87,20 @@ class TimetableController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->timetable_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionGenerate()
+    {
+        $timetableData = Timetable::find()->all();
+
+        return $this->render('generate', [
+            'timetableData' => $timetableData,
         ]);
     }
 

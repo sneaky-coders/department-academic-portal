@@ -36,7 +36,7 @@ class Faculty extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'name', 'email', 'contact', 'staffid'], 'required'],
+            [['user_id', 'name', 'email'], 'required'],
             [['user_id', 'contact'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['name', 'email'], 'string', 'max' => 100],

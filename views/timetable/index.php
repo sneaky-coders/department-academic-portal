@@ -26,13 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'timetable_id:datetime',
+            'id',
             'course_id',
             'subject_id',
-            'faculty_id',
-            'room_id',
-            //'timeslot:datetime',
-            //'day_id',
+            'labsession',
+            'faculty_id1',
+            //'faculty_id2',
+            //'faculty_id3',
+            //'room',
+            //'timeslot',
+            //'day',
             //'created_at',
             //'updated_at',
 

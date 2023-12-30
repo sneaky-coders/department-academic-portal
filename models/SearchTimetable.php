@@ -17,8 +17,8 @@ class SearchTimetable extends Timetable
     public function rules()
     {
         return [
-            [['timetable_id', 'course_id', 'subject_id', 'faculty_id', 'room_id', 'timeslot', 'day_id'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['id', 'course_id', 'subject_id', 'faculty_id1', 'faculty_id2', 'faculty_id3'], 'integer'],
+            [['labsession', 'room', 'timeslot', 'day', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -58,16 +58,20 @@ class SearchTimetable extends Timetable
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'timetable_id' => $this->timetable_id,
+            'id' => $this->id,
             'course_id' => $this->course_id,
             'subject_id' => $this->subject_id,
-            'faculty_id' => $this->faculty_id,
-            'room_id' => $this->room_id,
-            'timeslot' => $this->timeslot,
-            'day_id' => $this->day_id,
+            'faculty_id1' => $this->faculty_id1,
+            'faculty_id2' => $this->faculty_id2,
+            'faculty_id3' => $this->faculty_id3,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+
+        $query->andFilterWhere(['like', 'labsession', $this->labsession])
+            ->andFilterWhere(['like', 'room', $this->room])
+            ->andFilterWhere(['like', 'timeslot', $this->timeslot])
+            ->andFilterWhere(['like', 'day', $this->day]);
 
         return $dataProvider;
     }
