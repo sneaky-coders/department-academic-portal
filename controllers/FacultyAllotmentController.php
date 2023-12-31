@@ -33,16 +33,27 @@ class FacultyAllotmentController extends Controller
      * Lists all Facultyallotment models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new SearchFacultyallotment();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    // Assuming you're using ActiveRecord for your model
+public function actionIndex()
+{
+    $searchModel = new SearchFacultyallotment();
+    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+    // Modify the query to exclude repeated faculties
+    $query = Facultyallotment::find()
+        ->select(['facultyallotment.*', 'COUNT(*) as facultyCount'])
+        ->joinWith(['faculty'])
+        ->groupBy(['user_id'])
+        ->having(['<>', 'COUNT(*)', 1]);
+
+    $dataProvider->query = $query;
+
+    return $this->render('index', [
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+    ]);
+}
+
 
     /**
      * Displays a single Facultyallotment model.

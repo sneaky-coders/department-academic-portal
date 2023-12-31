@@ -44,6 +44,23 @@
 
         <?php 
         if (!Yii::$app->user->isGuest) { 
+            
+         
+
+
+            echo dmstr\widgets\Menu::widget(
+                [
+                    'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                    'items' => [
+                        [
+                            'label' => 'Dashboard',
+                            'icon' => 'circle-o',
+                            'url' => ['/site/index'],
+                        ],
+                    ],
+                ]
+            );
+            
 
             echo dmstr\widgets\Menu::widget(
                 [
