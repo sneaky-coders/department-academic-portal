@@ -5,16 +5,11 @@ use yii\helpers\Html;
 /* @var $content string */
 
 if (Yii::$app->controller->action->id === 'login') { 
-/**
- * Do not use this code in your template. Remove it. 
- * Instead, use the code  $this->layout = '//main-login'; in your controller.
- */
-    echo $this->render(
-        'main-login',
-        ['content' => $content]
-    );
+    // Code for the login page
+    echo $this->render('main-login', ['content' => $content]);
 } else {
-
+    // Code for other pages
+    
     if (class_exists('backend\assets\AppAsset')) {
         backend\assets\AppAsset::register($this);
     } else {
@@ -36,66 +31,54 @@ if (Yii::$app->controller->action->id === 'login') {
         
         <?php $this->head() ?>
         <style>
-             @font-face {
-                font-family: "Dosis";
-                src: url("font/Dosis-Regular.ttf");
-            }
-            body{
+            /* Customize the color scheme here */
+            body {
+                background-color: #f8f9fa; /* Set the background color */
                 font-family: 'Dosis', sans-serif;
             }
-            h1{
-                font-family: 'Dosis', sans-serif;
-                margin-bottom: 20px;
-            }
+
+            /* Example: Change the main header background color */
             .skin-blue .main-header .navbar {
-                background-color: #222d32;
+                background-color: #007bff; /* Change to your preferred color */
             }
+
+            /* Example: Change the logo background color */
             .skin-blue .main-header .logo {
-                background-color: #000000;
-                color: #fff;
+                background-color: #0056b3; /* Change to your preferred color */
+                color: #fff; /* Change the text color */
                 border-bottom: 0 solid transparent;
             }
+
+            /* Example: Change the content wrapper background color */
             .content-wrapper {
                 min-height: calc(100vh - 101px);
-                background-color: #ffffff;
+                background-color: #ffffff; /* Change to your preferred color */
                 z-index: 800;
             }
-            .skin-blue .main-header .navbar .sidebar-toggle:hover {
-                background-color: black !important;
+
+            /* Example: Change the sidebar background color */
+            .skin-blue .main-sidebar {
+                background-color: #343a40; /* Change to your preferred color */
             }
-            .select2-container .select2-selection--single {
-                box-sizing: border-box;
-                cursor: pointer;
-                display: block;
-                height: 34px;
-                user-select: none;
-                -webkit-user-select: none;
+
+            /* Example: Change the sidebar link color */
+            .skin-blue .main-sidebar a {
+                color: #c2c7d0; /* Change to your preferred color */
             }
-           
+
+            /* Add or modify other styles as needed */
+
+            
         </style>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
     <?php $this->beginBody() ?>
     <div class="wrapper">
-
-        <?= $this->render(
-            'header.php',
-            ['directoryAsset' => $directoryAsset]
-        ) ?>
-
-        <?= $this->render(
-            'left.php',
-            ['directoryAsset' => $directoryAsset]
-        )
-        ?>
-
-        <?= $this->render(
-            'content.php',
-            ['content' => $content, 'directoryAsset' => $directoryAsset]
-        ) ?>
-
+        <!-- Include header, left sidebar, and content sections -->
+        <?= $this->render('header.php', ['directoryAsset' => $directoryAsset]) ?>
+        <?= $this->render('left.php', ['directoryAsset' => $directoryAsset]) ?>
+        <?= $this->render('content.php', ['content' => $content, 'directoryAsset' => $directoryAsset]) ?>
     </div>
-
     <?php $this->endBody() ?>
     </body>
     </html>

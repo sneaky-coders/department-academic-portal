@@ -21,9 +21,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'subject_id') ?>
 
-    <?= $form->field($model, 'labsession') ?>
+    <?= $form->field($model, 'scheme') ?>
 
-    <?= $form->field($model, 'faculty_id1') ?>
+    <?= $form->field($model, 'division') ?>
+
+    <?php // echo $form->field($model, 'labsession') ?>
+
+    <?php // echo $form->field($model, 'faculty_id1') ?>
 
     <?php // echo $form->field($model, 'faculty_id2') ?>
 

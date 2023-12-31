@@ -24,6 +24,7 @@ return array(
     'kartik\\dynagrid\\' => array($vendorDir . '/kartik-v/yii2-dynagrid/src'),
     'kartik\\dialog\\' => array($vendorDir . '/kartik-v/yii2-dialog/src'),
     'kartik\\base\\' => array($vendorDir . '/kartik-v/yii2-krajee-base/src'),
+    'dosamigos\\chartjs\\' => array($vendorDir . '/2amigos/yii2-chartjs-widget/src'),
     'dmstr\\' => array($vendorDir . '/dmstr/yii2-adminlte-asset'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'ZipStream\\' => array($vendorDir . '/maennchen/zipstream-php/src'),

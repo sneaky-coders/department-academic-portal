@@ -10,10 +10,13 @@ use Yii;
  * @property int $id
  * @property int|null $course_id
  * @property int $subject_id
+ * @property string $scheme
+ * @property string $division
+ * @property string $semester
  * @property string $labsession
  * @property int|null $faculty_id1
- * @property int $faculty_id2
- * @property int $faculty_id3
+ * @property int|null $faculty_id2
+ * @property int|null $faculty_id3
  * @property string|null $room
  * @property string|null $timeslot
  * @property string|null $day
@@ -27,12 +30,15 @@ use Yii;
  */
 class Timetable extends \yii\db\ActiveRecord
 {
+
+    
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'timetable';
+        
     }
 
     /**
@@ -42,12 +48,12 @@ class Timetable extends \yii\db\ActiveRecord
     {
         return [
             [['course_id', 'subject_id', 'faculty_id1', 'faculty_id2', 'faculty_id3'], 'integer'],
-            [['subject_id'], 'required'],
+            [['subject_id', 'division'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
-            [['labsession'], 'string', 'max' => 10],
+            [['scheme', 'day','semester'], 'string', 'max' => 30],
+            [['division', 'labsession'], 'string', 'max' => 10],
             [['room'], 'string', 'max' => 50],
             [['timeslot'], 'string', 'max' => 100],
-            [['day'], 'string', 'max' => 30],
             [['faculty_id1'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['faculty_id1' => 'id']],
             [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Courses::className(), 'targetAttribute' => ['subject_id' => 'id']],
             [['faculty_id2'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['faculty_id2' => 'id']],
@@ -64,6 +70,8 @@ class Timetable extends \yii\db\ActiveRecord
             'id' => 'ID',
             'course_id' => 'Course ID',
             'subject_id' => 'Subject ID',
+            'scheme' => 'Scheme',
+            'division' => 'Division',
             'labsession' => 'Labsession',
             'faculty_id1' => 'Faculty Id1',
             'faculty_id2' => 'Faculty Id2',
@@ -71,6 +79,7 @@ class Timetable extends \yii\db\ActiveRecord
             'room' => 'Room',
             'timeslot' => 'Timeslot',
             'day' => 'Day',
+            'semester' => 'Semester',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -114,5 +123,22 @@ class Timetable extends \yii\db\ActiveRecord
     public function getFacultyId3()
     {
         return $this->hasOne(Faculty::className(), ['id' => 'faculty_id3']);
+    }
+
+    public static function isFacultyAvailable($semester, $timeslot, $day, $facultyId)
+    {
+        // Your logic to check faculty availability goes here
+        // Example: check the database for existing entries with the same parameters
+    
+        $count = static::find()
+            ->andWhere(['semester' => $semester, 'timeslot' => $timeslot, 'day' => $day])
+            ->andWhere(['or',
+                ['faculty_id1' => $facultyId],
+                ['faculty_id2' => $facultyId],
+                ['faculty_id3' => $facultyId],
+            ])
+            ->count();
+    
+        return $count == 0; // Return true if the faculty is available, false otherwise
     }
 }

@@ -18,7 +18,7 @@ class SearchTimetable extends Timetable
     {
         return [
             [['id', 'course_id', 'subject_id', 'faculty_id1', 'faculty_id2', 'faculty_id3'], 'integer'],
-            [['labsession', 'room', 'timeslot', 'day', 'created_at', 'updated_at'], 'safe'],
+            [['scheme', 'division', 'labsession', 'room', 'timeslot', 'day', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -68,7 +68,9 @@ class SearchTimetable extends Timetable
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'labsession', $this->labsession])
+        $query->andFilterWhere(['like', 'scheme', $this->scheme])
+            ->andFilterWhere(['like', 'division', $this->division])
+            ->andFilterWhere(['like', 'labsession', $this->labsession])
             ->andFilterWhere(['like', 'room', $this->room])
             ->andFilterWhere(['like', 'timeslot', $this->timeslot])
             ->andFilterWhere(['like', 'day', $this->day]);

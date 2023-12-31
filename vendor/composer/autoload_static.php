@@ -60,6 +60,7 @@ class ComposerStaticInit3e52b334f41f0782e43832adc643e3bd
         ),
         'd' => 
         array (
+            'dosamigos\\chartjs\\' => 18,
             'dmstr\\' => 6,
         ),
         'c' => 
@@ -209,6 +210,10 @@ class ComposerStaticInit3e52b334f41f0782e43832adc643e3bd
         'kartik\\base\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base/src',
+        ),
+        'dosamigos\\chartjs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/2amigos/yii2-chartjs-widget/src',
         ),
         'dmstr\\' => 
         array (

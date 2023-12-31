@@ -21,20 +21,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <h1><?= Html::encode($this->title) ?></h1>
 
-<div class="header">
-    <h2>MCA Semester 3 Div - A</h2>
-</div>
-
 <?php
+$semester = '2';  // Set the desired semester
+$division = 'A';           // Set the desired division
+
+$this->params['breadcrumbs'][] = ['label' => 'Sem'.$semester . ' Division ' . $division, 'url' => ['/timetable/index']];
+
+echo "<div class='header'>";
+echo "<h2>Sem :{$semester} Div - {$division}</h2>";
+echo "</div>";
+
 if (empty($timetableData)) {
     echo "<p>No timetable entries available.</p>";
 } else {
-    // Group timetable entries by day and timeslot
+    // Filter timetable data for the selected semester and division
+    $filteredTimetable = array_filter($timetableData, function ($entry) use ($semester, $division) {
+        return $entry->semester === $semester && $entry->division === $division;
+    });
+
+    // Group filtered timetable entries by day and timeslot
     $groupedTimetable = [];
     $allTimeslots = [];
     $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-    foreach ($timetableData as $entry) {
+    foreach ($filteredTimetable as $entry) {
         $day = $entry->day;
         $timeslot = $entry->timeslot;
 
@@ -51,7 +61,7 @@ if (empty($timetableData)) {
 
     // Display header row with timeslots and days
     echo "<thead><tr>";
-    echo "<th colspan='" . (count($allTimeslots) + 1) . "' class='text-center'>MCA Semester 3 Div - A</th>"; // Span across all timeslots
+    echo "<th colspan='" . (count($allTimeslots) + 1) . "' class='text-center'>Sem {$semester} Div - {$division}</th>"; // Span across all timeslots
     echo "</tr><tr>"; // Add a new row
 
     echo "<th>Day/Time Slot</th>";

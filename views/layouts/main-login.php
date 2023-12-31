@@ -17,10 +17,19 @@ dmstr\web\AdminLteAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <style>
-        .login-page{
-            background-image: url("img/double-bubble-dark.png");
-        }
-    </style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .login-page {
+        background-image: url("img/bg2.jpg");
+        background-size: cover;
+        height: 80vh;
+    }
+</style>
+
 </head>
 <body class="login-page">
 
