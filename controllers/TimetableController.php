@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\TimetableGenerator;
 use yii\web\Response;
+use app\models\Faculty;
 
 /**
  * TimetableController implements the CRUD actions for Timetable model.
@@ -77,15 +78,59 @@ class TimetableController extends Controller
     public function actionCreate()
     {
         $model = new Timetable();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    
+        if (!$model->load(Yii::$app->request->post())) {
+            return $this->render('create', ['model' => $model]);
+        }
+    
+        // Check if a record already exists for the specified day, time, and faculty
+        if ($this->checkRecordExists($model->timeslot, $model->day, $model->faculty_id1)
+            || $this->checkRecordExists($model->timeslot, $model->day, $model->faculty_id2)
+            || $this->checkRecordExists($model->timeslot, $model->day, $model->faculty_id3)) {
+    
+            $facultyName = $this->getFacultyName($model->faculty_id1);
+            Yii::$app->session->setFlash('error', "A record already exists for $facultyName in the selected timeslot, day, and faculty.");
+            return $this->render('create', ['model' => $model]);
+        }
+    
+        // Check faculty availability before saving
+        if (!$this->checkFacultyAvailability($model->timeslot, $model->day, $model->faculty_id1)
+            || !$this->checkFacultyAvailability($model->timeslot, $model->day, $model->faculty_id2)
+            || !$this->checkFacultyAvailability($model->timeslot, $model->day, $model->faculty_id3)) {
+    
+            $facultyName = $this->getFacultyName($model->faculty_id1);
+            $semester = $model->semester;
+            $time = $model->timeslot;
+            Yii::$app->session->setFlash('error', "Faculty $facultyName is not available in the selected timeslot ($time) and day for semester $semester.");
+            return $this->render('create', ['model' => $model]);
+        }
+    
+        // Save the model if everything is okay
+        if ($model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+    
+        // Handle the case where saving the model fails
+        Yii::$app->session->setFlash('error', 'An error occurred while saving the timetable entry.');
+        return $this->render('create', ['model' => $model]);
     }
+    
+    // Helper method to get faculty name by ID
+    private function getFacultyName($facultyId)
+    {
+        $faculty = Faculty::findOne($facultyId);
+        return $faculty ? $faculty->name : 'Unknown Faculty';
+    }
+    
+    private function checkRecordExists($timeslot, $day, $facultyId)
+    {
+        return Timetable::find()
+            ->andWhere(['timeslot' => $timeslot, 'day' => $day])
+            ->andWhere(['OR', ['faculty_id1' => $facultyId], ['faculty_id2' => $facultyId], ['faculty_id3' => $facultyId]])
+            ->exists();
+    }
+
+    
 
     /**
      * Updates an existing Timetable model.
@@ -198,29 +243,11 @@ class TimetableController extends Controller
 
 
    // Function to check faculty availability
-private function checkFacultyAvailability($timeslot, $day, $facultyId)
-{
-    // Query the database to check if the faculty is already assigned to another class on the same day and timeslot
-    $existingEntry = Timetable::find()
-        ->andWhere(['timeslot' => $timeslot])
-        ->andWhere(['day' => $day])
-        ->andWhere(['OR',
-            ['faculty_id1' => $facultyId],
-            ['faculty_id2' => $facultyId],
-            ['faculty_id3' => $facultyId],
-        ])
-        ->andWhere(['<>', 'status', Timetable::STATUS_DELETED]) // Exclude deleted entries
-        ->one();
-
-    // If there's an existing entry, faculty is not available
-    return $existingEntry === null;
-}
 
 // Action to check faculty availability
 public function actionCheckFacultyAvailability()
 {
     // Get parameters from the AJAX request
-    $semester = Yii::$app->request->get('semester');
     $timeslot = Yii::$app->request->get('timeslot');
     $day = Yii::$app->request->get('day');
     $facultyId = Yii::$app->request->get('facultyId');
@@ -228,10 +255,33 @@ public function actionCheckFacultyAvailability()
     // Implement your actual logic to check faculty availability
     $isAvailable = $this->checkFacultyAvailability($timeslot, $day, $facultyId);
 
+    // Get faculty name
+    $facultyName = $this->getFacultyName($facultyId);
+
     // Return the result as JSON along with a message
-    $message = $isAvailable ? 'Faculty is available' : 'Faculty is not available';
+    $message = $isAvailable
+        ? "Faculty $facultyName is available for timeslot $timeslot and day $day."
+        : "Faculty $facultyName is not available for timeslot $timeslot and day $day.";
+
     return $this->asJson(['success' => $isAvailable, 'message' => $message]);
 }
+
+private function checkFacultyAvailability($timeslot, $day, $facultyId)
+{
+    // Query the database to check if the faculty is already assigned to another class on the same day and timeslot
+    $existingEntry = Timetable::find()
+        ->andWhere(['timeslot' => $timeslot, 'day' => $day])
+        ->andWhere(['OR',
+            ['faculty_id1' => $facultyId],
+            ['faculty_id2' => $facultyId],
+            ['faculty_id3' => $facultyId],
+        ])
+        ->one();
+
+    // If there's an existing entry, faculty is not available
+    return $existingEntry === null;
+}
+
 
 
     

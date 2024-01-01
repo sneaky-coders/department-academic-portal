@@ -5,6 +5,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json; // Ensure you have this use statement
 use app\models\Courses;
 use app\models\Faculty;
 use yii\helpers\Url;
@@ -55,73 +56,7 @@ $this->registerJs("
         semesterInput.val(courseSemesterMapping[selectedCourse] || '');
     });
 
-    // Validate form before submission
-    $('#timetable-form').submit(function(event) {
-        // Check if faculties are already allocated in the same timeslot and day
-        var selectedSemester = semesterInput.val();
-        var selectedTimeslot = $('#" . Html::getInputId($model, 'timeslot') . "').val();
-        var selectedDay = $('#" . Html::getInputId($model, 'day') . "').val();
-        var faculty1 = $('#" . Html::getInputId($model, 'faculty_id1') . "').val();
-        var faculty2 = $('#" . Html::getInputId($model, 'faculty_id2') . "').val();
-        var faculty3 = $('#" . Html::getInputId($model, 'faculty_id3') . "').val();
-
-        // Prevent form submission if any faculty is not available
-        if (!checkFacultyAvailability(selectedSemester, selectedTimeslot, selectedDay, faculty1)) {
-            alertFacultyNotAvailable(faculty1);
-            event.preventDefault(); // Prevent form submission
-            return false;
-        }
-
-        if (!checkFacultyAvailability(selectedSemester, selectedTimeslot, selectedDay, faculty2)) {
-            alertFacultyNotAvailable(faculty2);
-            event.preventDefault(); // Prevent form submission
-            return false;
-        }
-
-        if (!checkFacultyAvailability(selectedSemester, selectedTimeslot, selectedDay, faculty3)) {
-            alertFacultyNotAvailable(faculty3);
-            event.preventDefault(); // Prevent form submission
-            return false;
-        }
-
-        return true; // Allow form submission if everything is valid
-    });
-
-    // Function to check faculty availability using AJAX
-    function checkFacultyAvailability(semester, timeslot, day, facultyId) {
-        var isAvailable = false;
-        $.ajax({
-            method: 'GET',
-            async: false, // Make the request synchronous
-            url: '" . Yii::$app->urlManager->createUrl(['/timetable/check-faculty-availability']) . "',
-            data: { semester: semester, timeslot: timeslot, day: day, facultyId: facultyId },
-            success: function(response) {
-                isAvailable = response.success;
-            },
-            error: function (error) {
-                console.error('Error checking faculty availability:', error);
-            }
-        });
-        return isAvailable;
-    }
-
-    // Function to alert faculty not available
-    function alertFacultyNotAvailable(facultyId) {
-        var facultyName = getFacultyName(facultyId);
-        alert(facultyName + ' is not available in the selected timeslot and day!');
-    }
-
-    // Function to get faculty name by ID
-    function getFacultyName(facultyId) {
-        var facultyName = '';
-        var facultyList = " . json_encode(ArrayHelper::map(Faculty::find()->all(), 'id', 'name')) . ";
-
-        if (facultyList[facultyId]) {
-            facultyName = facultyList[facultyId];
-        }
-
-        return facultyName;
-    }
+   
 ");
 ?>
 

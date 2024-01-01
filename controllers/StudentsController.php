@@ -4,10 +4,12 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Students;
+use app\models\Users; // Assuming your model for students is Users
 use app\models\SearchStudents;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * StudentsController implements the CRUD actions for Students model.
@@ -42,6 +44,30 @@ class StudentsController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionGetUserDetails($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        try {
+            // Fetch user details based on the provided user ID
+            $user = Users::findOne($id);
+
+            if ($user !== null) {
+                return [
+                    'name' => $user->username,
+                    'email' => $user->email,
+                    'contact' => $user->contact,
+                    // Add or remove attributes as needed
+                ];
+            } else {
+                return ['error' => 'User not found'];
+            }
+        } catch (\Exception $e) {
+            Yii::error('Error fetching user details: ' . $e->getMessage(), 'faculty');
+            return ['error' => 'An error occurred while fetching user details'];
+        }
     }
 
     /**

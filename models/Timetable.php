@@ -30,6 +30,7 @@ use Yii;
  */
 class Timetable extends \yii\db\ActiveRecord
 {
+    const STATUS_DELETED = 0;
 
     
     /**
