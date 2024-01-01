@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\models\Courses;
 use app\models\Faculty;
+use yii\helpers\Url;
 
 $this->title = 'Create Timetable Entry';
 $this->params['breadcrumbs'][] = ['label' => 'Timetable', 'url' => ['index']];
@@ -48,7 +49,7 @@ $this->registerJs("
     courseDropdown.change(function() {
         var selectedCourse = courseDropdown.val();
         // Assuming you have a mapping of courses to semesters, replace this with your logic
-        var courseSemesterMapping = " . json_encode(['1' => 'I', '2' => 'II', '3' => 'III', '4' => 'IV']) . ";
+        var courseSemesterMapping = " . json_encode(['1' => '1', '2' => '2', '3' => '3', '4' => '4']) . ";
 
         // Set the value of the semester input
         semesterInput.val(courseSemesterMapping[selectedCourse] || '');
@@ -88,36 +89,21 @@ $this->registerJs("
 
     // Function to check faculty availability using AJAX
     function checkFacultyAvailability(semester, timeslot, day, facultyId) {
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-                method: 'GET',
-                url: '" . Yii::$app->urlManager->createUrl(['/timetable/check-faculty-availability']) . "',
-                data: { semester: semester, timeslot: timeslot, day: day, facultyId: facultyId },
-                success: function(response) {
-                    resolve(response.success);
-                },
-                error: function (error) {
-                    reject(error);
-                }
-            });
-        });
-    }
-    
-    // Example of using the function with a promise
-    checkFacultyAvailability('II', '10:00-10:55', 'Friday', 2)
-        .then(function (isAvailable) {
-            if (isAvailable) {
-                // Faculty is available
-                console.log('Faculty is available');
-            } else {
-                // Faculty is not available
-                console.log('Faculty is not available');
+        var isAvailable = false;
+        $.ajax({
+            method: 'GET',
+            async: false, // Make the request synchronous
+            url: '" . Yii::$app->urlManager->createUrl(['/timetable/check-faculty-availability']) . "',
+            data: { semester: semester, timeslot: timeslot, day: day, facultyId: facultyId },
+            success: function(response) {
+                isAvailable = response.success;
+            },
+            error: function (error) {
+                console.error('Error checking faculty availability:', error);
             }
-        })
-        .catch(function (error) {
-            console.error('Error checking faculty availability:', error);
         });
-    
+        return isAvailable;
+    }
 
     // Function to alert faculty not available
     function alertFacultyNotAvailable(facultyId) {

@@ -60,7 +60,7 @@
                     ],
                 ]
             );
-            
+           
 
             echo dmstr\widgets\Menu::widget(
                 [

@@ -60,11 +60,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'faculty/search' => 'faculty/search',
-                'faculty/locate/<facultyId:\d+>' => 'faculty/locate',
-                'faculty/search-form' => 'faculty/search-form',
-                'batch-input' => 'allotment/batch-input-form',
-                
+                'timetable/check-faculty-availability' => 'timetable/check-faculty-availability',
+                // Other rules...
             ],
         ],
 

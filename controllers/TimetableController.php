@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\TimetableGenerator;
+use yii\web\Response;
 
 /**
  * TimetableController implements the CRUD actions for Timetable model.
@@ -45,73 +46,15 @@ class TimetableController extends Controller
         ]);
     }
 
-    public function actionRandomTimetable($schemeId, $divisionId, $semesterId)
-    {
-        // Fetch data based on the selected scheme, division, and semester
-        $courses = Courses::find()->where(['scheme_id' => $schemeId, 'division_id' => $divisionId, 'semester_id' => $semesterId])->all();
-        $faculties = Faculty::find()->all();
-        $rooms = Room::find()->all();
+   
 
-        // Generate a random timetable
-        $timetable = $this->generateRandomTimetable($courses, $faculties, $rooms);
-
-        return $this->render('random-timetable', [
-            'timetable' => $timetable,
-        ]);
-    }
+    
 
     // Function to generate a random timetable
-    private function generateRandomTimetable($courses, $faculties)
-    {
-        $timetable = [];
     
-        foreach ($courses as $course) {
-            $entry = [
-                'course' => $course->name,
-                'division' => $course->division->name,
-                'day' => $this->getRandomDay(),
-                'faculty' => $this->getRandomFaculty($faculties),
-                'timeslot' => $this->getRandomTimeslot(),
-            ];
-    
-            $timetable[] = $entry;
-        }
-    
-        return $timetable;
-    }
 
     // Functions to get random values
-    private function getRandomDay()
-    {
-        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-        return $days[array_rand($days)];
-    }
-
-    private function getRandomFaculty($faculties)
-    {
-        $faculty = $faculties[array_rand($faculties)];
-        return $faculty->name;
-    }
-
-    private function getRandomRoom($rooms)
-    {
-        $room = $rooms[array_rand($rooms)];
-        return $room->name;
-    }
-
-    private function getRandomTimeslot()
-    {
-        $timeslots = ['10:00-10:55', '11:00-11:55', '2:00-2:55', '3:00-3:55'];
-        return $timeslots[array_rand($timeslots)];
-    }
-
-    public function actionGenerateRandomTimetable()
-    {
-        $generator = new TimetableGenerator();
-        $randomTimetable = $generator->generateRandomTimetable();
-
-        return $this->render('random-timetable', ['timetable' => $randomTimetable]);
-    }
+    
 
     /**
      * Displays a single Timetable model.
@@ -252,20 +195,45 @@ class TimetableController extends Controller
             'timetableData' => $timetableData,
         ]);
     }
-    public function actionCheckFacultyAvailability($semester, $timeslot, $day, $facultyId)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-    
-        try {
-            $isAvailable = Timetable::isFacultyAvailable($semester, $timeslot, $day, $facultyId);
-            Yii::info('Faculty availability check successful', 'timetable');
-            return ['success' => $isAvailable];
-        } catch (\Exception $e) {
-            Yii::error('Error in faculty availability check: ' . $e->getMessage(), 'timetable');
-            return ['success' => false, 'error' => $e->getMessage()];
-        }
-    }
-    
+
+
+   // Function to check faculty availability
+private function checkFacultyAvailability($timeslot, $day, $facultyId)
+{
+    // Query the database to check if the faculty is already assigned to another class on the same day and timeslot
+    $existingEntry = Timetable::find()
+        ->andWhere(['timeslot' => $timeslot])
+        ->andWhere(['day' => $day])
+        ->andWhere(['OR',
+            ['faculty_id1' => $facultyId],
+            ['faculty_id2' => $facultyId],
+            ['faculty_id3' => $facultyId],
+        ])
+        ->andWhere(['<>', 'status', Timetable::STATUS_DELETED]) // Exclude deleted entries
+        ->one();
+
+    // If there's an existing entry, faculty is not available
+    return $existingEntry === null;
+}
+
+// Action to check faculty availability
+public function actionCheckFacultyAvailability()
+{
+    // Get parameters from the AJAX request
+    $semester = Yii::$app->request->get('semester');
+    $timeslot = Yii::$app->request->get('timeslot');
+    $day = Yii::$app->request->get('day');
+    $facultyId = Yii::$app->request->get('facultyId');
+
+    // Implement your actual logic to check faculty availability
+    $isAvailable = $this->checkFacultyAvailability($timeslot, $day, $facultyId);
+
+    // Return the result as JSON along with a message
+    $message = $isAvailable ? 'Faculty is available' : 'Faculty is not available';
+    return $this->asJson(['success' => $isAvailable, 'message' => $message]);
+}
+
+
     
     /**
      * Finds the Timetable model based on its primary key value.
