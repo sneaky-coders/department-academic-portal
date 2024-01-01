@@ -7,11 +7,13 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'yii\\swiftmailer\\' => array($vendorDir . '/yiisoft/yii2-swiftmailer/src'),
+    'yii\\jui\\' => array($vendorDir . '/yiisoft/yii2-jui'),
     'yii\\gii\\' => array($vendorDir . '/yiisoft/yii2-gii/src'),
     'yii\\faker\\' => array($vendorDir . '/yiisoft/yii2-faker/src'),
     'yii\\debug\\' => array($vendorDir . '/yiisoft/yii2-debug/src'),
     'yii\\composer\\' => array($vendorDir . '/yiisoft/yii2-composer'),
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap/src'),
+    'yii\\bootstrap4\\' => array($vendorDir . '/yiisoft/yii2-bootstrap4/src'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'setasign\\Fpdi\\' => array($vendorDir . '/setasign/fpdi/src'),
     'rmrevin\\yii\\fontawesome\\' => array($vendorDir . '/rmrevin/yii2-fontawesome'),

@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
@@ -62,26 +61,41 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->faculty->staffid; // Assuming 'user' is the relation to the users table
                 },
             ],
-           
         ],
     ]) ?>
 
     <h2>Allotted Courses:</h2>
 
     <?= GridView::widget([
-    'dataProvider' => new \yii\data\ActiveDataProvider([
-        'query' => $model->faculty->getFacultyAllotments()->with('course'), // Assuming 'getFacultyAllotments' is the relation name in Faculty model
-        'pagination' => false,
-    ]),
-    'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-        'course.coursename',  // Assuming 'coursename' is an attribute in the Course model
-        'course.coursecode', // Assuming 'course_code' is another attribute in the Course model
-        'course.semester',  // Assuming 'description' is yet another attribute in the Course model
-        'course.credits',  // Assuming 'description' is yet another attribute in the Course model
-        // Add more columns if needed
-    ],
-]); ?>
+        'dataProvider' => new \yii\data\ActiveDataProvider([
+            'query' => $model->faculty->getFacultyAllotments()->with('course'), // Assuming 'getFacultyAllotments' is the relation name in Faculty model
+            'pagination' => false,
+        ]),
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            'course.coursename',  // Assuming 'coursename' is an attribute in the Course model
+            'course.coursecode', // Assuming 'course_code' is another attribute in the Course model
+            'course.semester',  // Assuming 'description' is yet another attribute in the Course model
+            'course.credits',  // Assuming 'description' is yet another attribute in the Course model
+            // Add more columns if needed
+        ],
+    ]); ?>
 
+    <h2>Workload Calculation:</h2>
+
+    <p>
+        <?php
+        // Example workload calculation based on assumptions
+        $teachingTime = 4; // Assuming 4 hours of lectures per week
+        $preparationTime = 10; // Assuming 10 hours of preparation per week
+        $officeHours = 2; // Assuming 2 hours of office hours per week
+        $gradingTime = 2; // Assuming 2 hours of grading per week
+        $administrativeTime = 3; // Assuming 3 hours of administrative duties per week
+
+        $totalWorkload = $teachingTime + $preparationTime + $officeHours + $gradingTime + $administrativeTime;
+        ?>
+
+        Total Workload: <?= $totalWorkload ?> hours per week
+    </p>
 
 </div>

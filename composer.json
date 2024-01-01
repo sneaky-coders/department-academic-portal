@@ -21,7 +21,9 @@
         "dmstr/yii2-adminlte-asset": "^2.1",
         "kartik-v/yii2-widget-select2": "dev-master",
         "kartik-v/yii2-export": "^1.4",
-        "2amigos/yii2-chartjs-widget": "^3.0"
+        "2amigos/yii2-chartjs-widget": "^3.0",
+        "yiisoft/yii2-bootstrap4": "^2.0",
+        "yiisoft/yii2-jui": "^2.0"
 
 	
     },

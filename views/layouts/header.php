@@ -1,9 +1,25 @@
 <?php
+
 use yii\helpers\Html;
 use app\models\Users;
+use app\models\Task;
+use yii\bootstrap\BootstrapAsset;
+use yii\bootstrap\BootstrapPluginAsset;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+
+$user = Yii::$app->user->identity;
+
+// Retrieve the latest 3 notifications related to tasks
+$taskNotifications = Task::find()
+    ->orderBy(['created_at' => SORT_DESC])
+    ->limit(3)
+    ->all();
+
+BootstrapAsset::register($this);
+BootstrapPluginAsset::register($this);
+
 ?>
 
 <header class="main-header">
@@ -88,8 +104,34 @@ use app\models\Users;
                                 ) ?>
                             </div>
                         </li>
+
+                         <!-- Notifications Dropdown -->
+                  
                     </ul>
                 </li>
+
+                <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-warning"><?= count($taskNotifications) ?></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have <?= count($taskNotifications) ?> latest task notifications</li>
+                            <li>
+                                <ul class="menu">
+                                    <?php foreach ($taskNotifications as $notification) : ?>
+                                        <li>
+                                            <a href="#">
+                                 
+                                                <i class="fa fa-tasks text-blue"></i> <?= Html::encode($notification->description) ?>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">View all</a></li>
+                        </ul>
+                    </li>
                 <?php
                 }?>
                 <!-- User Account: style can be found in dropdown.less -->

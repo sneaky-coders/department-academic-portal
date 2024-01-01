@@ -12,9 +12,9 @@ use app\models\LoginForm;
 use app\models\Users;
 use yii\widgets\ActiveForm;
 use app\controller\ContactForm;
-use app\models\Event;
-use app\models\Set1;
-use app\models\Set2;
+
+use app\models\Task;
+use app\models\Deadlines;
 
 
 class SiteController extends Controller
@@ -68,20 +68,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if (!Yii::$app->user->isGuest) {
-           
-            
-          
-        return $this->render('index', [
-           
-        ]);
-    
-            
-           
-        }else{
-            return $this->redirect(['/site/login']);
-        }
+        $tasks = Deadlines::find()
+        ->orderBy(['created_at' => SORT_DESC])
+        ->limit(3)
+        ->all(); // Replace with your actual data retrieval logic
 
+        return $this->render('index', [
+            'tasks' => $tasks,
+        ]);
     }
 
  

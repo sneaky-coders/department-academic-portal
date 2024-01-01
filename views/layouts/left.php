@@ -94,7 +94,41 @@
                         ],
                     ],
                 ]
-            );    
+            );  
+            
+            echo dmstr\widgets\Menu::widget(
+                [
+                    'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                    'items' => [
+                        [
+                            'label' => 'Push Notifications',
+                            'icon' => 'bell',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/task/create'],],
+                                ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/task'],],
+                            ],
+                        ],
+                    ],
+                ]
+            );  
+
+            echo dmstr\widgets\Menu::widget(
+                [
+                    'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                    'items' => [
+                        [
+                            'label' => 'Push Deadlines',
+                            'icon' => 'calendar',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/deadlines/create'],],
+                                ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/deadlines'],],
+                            ],
+                        ],
+                    ],
+                ]
+            );  
 
             echo dmstr\widgets\Menu::widget(
                 [

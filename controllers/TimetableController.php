@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\models\TimetableGenerator;
 use yii\web\Response;
 use app\models\Faculty;
+use app\models\Courses;
 
 /**
  * TimetableController implements the CRUD actions for Timetable model.
@@ -282,6 +283,52 @@ private function checkFacultyAvailability($timeslot, $day, $facultyId)
     return $existingEntry === null;
 }
 
+
+private function generateRandomTimetable()
+    {
+        // Fetch courses and faculties
+        $courses = Courses::find()->all();
+        $faculties = Faculty::find()->all();
+
+        // Iterate through courses
+        foreach ($courses as $course) {
+            $classesPerWeek = $this->calculateClassesPerWeek($course->credits);
+
+            $morningClasses = (int) ($classesPerWeek * 0.6);
+            $afternoonClasses = $classesPerWeek - $morningClasses;
+
+            // Iterate through morning classes
+            for ($i = 0; $i < $morningClasses; $i++) {
+                $this->allocateFaculty($course, 'morning', $faculties, RandomTimetable::class);
+            }
+
+            // Iterate through afternoon classes
+            for ($i = 0; $i < $afternoonClasses; $i++) {
+                $this->allocateFaculty($course, 'afternoon', $faculties, RandomTimetable::class);
+            }
+        }
+    }
+
+    /**
+     * Method to allocate faculty for a course and store it in the specified table.
+     */
+    private function allocateFaculty($course, $timeSlot, &$faculties, $tableName)
+    {
+        if (!empty($faculties)) {
+            $faculty = array_shift($faculties);
+
+            // Use the specified table name (RandomTimetable) to create an instance
+            $randomTimetableEntry = new $tableName([
+                'course_id' => $course->id,
+                'faculty_id' => $faculty->id,
+                'time_slot' => $timeSlot,
+                // Add other attributes as needed
+            ]);
+
+            // Save the entry to the specified table
+            $randomTimetableEntry->save();
+        }
+    }
 
 
     

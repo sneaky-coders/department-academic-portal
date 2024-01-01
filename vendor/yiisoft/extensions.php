@@ -165,4 +165,22 @@ return array (
       '@dosamigos/chartjs' => $vendorDir . '/2amigos/yii2-chartjs-widget/src',
     ),
   ),
+  'yiisoft/yii2-bootstrap4' => 
+  array (
+    'name' => 'yiisoft/yii2-bootstrap4',
+    'version' => '2.0.11.0',
+    'alias' => 
+    array (
+      '@yii/bootstrap4' => $vendorDir . '/yiisoft/yii2-bootstrap4/src',
+    ),
+  ),
+  'yiisoft/yii2-jui' => 
+  array (
+    'name' => 'yiisoft/yii2-jui',
+    'version' => '2.0.7.0',
+    'alias' => 
+    array (
+      '@yii/jui' => $vendorDir . '/yiisoft/yii2-jui',
+    ),
+  ),
 );
