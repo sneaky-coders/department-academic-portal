@@ -142,4 +142,11 @@ class Timetable extends \yii\db\ActiveRecord
     
         return $count == 0; // Return true if the faculty is available, false otherwise
     }
+
+    public function getCourse()
+    {
+        return $this->hasOne(Courses::class, ['id' => 'course_id']);
+    }
 }
+
+
