@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Facultyallotment;
-use app\models\SearchFacultyallotment;
+use app\models\Room;
+use app\models\SearchRoom;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * FacultyAllotmentController implements the CRUD actions for Facultyallotment model.
+ * RoomController implements the CRUD actions for Room model.
  */
-class FacultyAllotmentController extends Controller
+class RoomController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,45 +30,22 @@ class FacultyAllotmentController extends Controller
     }
 
     /**
-     * Lists all Facultyallotment models.
+     * Lists all Room models.
      * @return mixed
      */
-    // Assuming you're using ActiveRecord for your model
-/*public function actionIndex()
-{
-    $searchModel = new SearchFacultyallotment();
-    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    public function actionIndex()
+    {
+        $searchModel = new SearchRoom();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-    // Modify the query to exclude repeated faculties
-    $query = Facultyallotment::find()
-        ->select(['facultyallotment.*', 'COUNT(*) as facultyCount'])
-        ->joinWith(['faculty'])
-        ->groupBy(['user_id'])
-        ->having(['<>', 'COUNT(*)', 1]);
-
-    $dataProvider->query = $query;
-
-    return $this->render('index', [
-        'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
-    ]);
-}
-*/
-
-public function actionIndex()
-{
-    $searchModel = new SearchFacultyallotment();
-    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-    return $this->render('index', [
-        'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
-    ]);
-}
-
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
-     * Displays a single Facultyallotment model.
+     * Displays a single Room model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -81,13 +58,13 @@ public function actionIndex()
     }
 
     /**
-     * Creates a new Facultyallotment model.
+     * Creates a new Room model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Facultyallotment();
+        $model = new Room();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -99,7 +76,7 @@ public function actionIndex()
     }
 
     /**
-     * Updates an existing Facultyallotment model.
+     * Updates an existing Room model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -119,7 +96,7 @@ public function actionIndex()
     }
 
     /**
-     * Deletes an existing Facultyallotment model.
+     * Deletes an existing Room model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -133,15 +110,15 @@ public function actionIndex()
     }
 
     /**
-     * Finds the Facultyallotment model based on its primary key value.
+     * Finds the Room model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Facultyallotment the loaded model
+     * @return Room the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Facultyallotment::findOne($id)) !== null) {
+        if (($model = Room::findOne($id)) !== null) {
             return $model;
         }
 

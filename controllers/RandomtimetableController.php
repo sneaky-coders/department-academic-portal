@@ -3,16 +3,19 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Facultyallotment;
-use app\models\SearchFacultyallotment;
+use app\models\Randomtimetable; // Assuming your model is named RandomTimetable
+use app\models\SearchRandomtimetable; // Assuming your model is named RandomTimetable
+use app\models\Timetable; // Assuming your timetable model is named Timetable
+use app\models\Courses; // Assuming your timetable model is named Timetable
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider; // Add this line
 
 /**
- * FacultyAllotmentController implements the CRUD actions for Facultyallotment model.
+ * RandomtimetableController implements the CRUD actions for Randomtimetable model.
  */
-class FacultyAllotmentController extends Controller
+class RandomtimetableController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,45 +33,57 @@ class FacultyAllotmentController extends Controller
     }
 
     /**
-     * Lists all Facultyallotment models.
+     * Lists all Randomtimetable models.
      * @return mixed
      */
-    // Assuming you're using ActiveRecord for your model
-/*public function actionIndex()
+  
+
+     public function actionGenerateRandomTimetable()
+     {
+         $model = new Randomtimetable();
+ 
+         try {
+             $timetable = $model->generateRandomTimetable();
+ 
+             if ($timetable) {
+                 Yii::$app->session->setFlash('success', 'Random timetable generated and saved successfully!');
+             } else {
+                 Yii::$app->session->setFlash('error', 'Failed to generate random timetable.');
+             }
+         } catch (\Exception $e) {
+             Yii::$app->session->setFlash('error', 'An error occurred: ' . $e->getMessage());
+         }
+ 
+         return $this->redirect(['index']); // Redirect to the desired page
+     }
+
+    /**
+     * Lists all Timetable models.
+     * @return mixed
+     */
+    public function actionIndex()
 {
-    $searchModel = new SearchFacultyallotment();
+    $searchModel = new SearchRandomtimetable(); // Assuming your search model is named SearchRandomtimetable
     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-    // Modify the query to exclude repeated faculties
-    $query = Facultyallotment::find()
-        ->select(['facultyallotment.*', 'COUNT(*) as facultyCount'])
-        ->joinWith(['faculty'])
-        ->groupBy(['user_id'])
-        ->having(['<>', 'COUNT(*)', 1]);
-
-    $dataProvider->query = $query;
 
     return $this->render('index', [
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
     ]);
 }
-*/
 
-public function actionIndex()
+public function actionDeleteAllRecords()
 {
-    $searchModel = new SearchFacultyallotment();
-    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    // Delete all records from the Randomtimetable model
+    Randomtimetable::deleteAll();
 
-    return $this->render('index', [
-        'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
-    ]);
+    // Redirect to the index page or any other page
+    return $this->redirect(['index']);
 }
 
 
     /**
-     * Displays a single Facultyallotment model.
+     * Displays a single Randomtimetable model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -81,13 +96,13 @@ public function actionIndex()
     }
 
     /**
-     * Creates a new Facultyallotment model.
+     * Creates a new Randomtimetable model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Facultyallotment();
+        $model = new Randomtimetable();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -99,7 +114,7 @@ public function actionIndex()
     }
 
     /**
-     * Updates an existing Facultyallotment model.
+     * Updates an existing Randomtimetable model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -119,7 +134,7 @@ public function actionIndex()
     }
 
     /**
-     * Deletes an existing Facultyallotment model.
+     * Deletes an existing Randomtimetable model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -132,19 +147,30 @@ public function actionIndex()
         return $this->redirect(['index']);
     }
 
+    public function actionSem1a()
+    {
+        $timetableData = Randomtimetable::find()->all();
+
+        return $this->render('sem1a', [
+            'timetableData' => $timetableData,
+        ]);
+    }
+
     /**
-     * Finds the Facultyallotment model based on its primary key value.
+     * Finds the Randomtimetable model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Facultyallotment the loaded model
+     * @return Randomtimetable the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Facultyallotment::findOne($id)) !== null) {
+        if (($model = Randomtimetable::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    
 }

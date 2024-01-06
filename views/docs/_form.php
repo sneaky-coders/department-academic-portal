@@ -13,8 +13,8 @@ use yii\widgets\ActiveForm;
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
 <?= $form->field($model, 'TT')->fileInput()->label("Time Table") ?>
-<?= $form->field($model, 'CP')->fileInput()->label("Course") ?>
-<?= $form->field($model, 'LP')->fileInput()->label("Lecture") ?>
+<?= $form->field($model, 'CP')->fileInput()->label("Course Document") ?>
+<?= $form->field($model, 'LP')->fileInput()->label("Lesson Plan") ?>
 
 
 

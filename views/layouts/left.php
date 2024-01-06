@@ -84,6 +84,30 @@
                     'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
                     'items' => [
                         [
+                            'label' => 'Allot Mentors',
+                            'icon' => 'book',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Random Allot', 'icon' => 'circle-o', 'url' => ['/allotment/random-allotment'],],
+                                ['label' => 'View Alloted', 'icon' => 'circle-o', 'url' => ['/allotment'],],
+                                ['label' => 'Add Mentors', 'icon' => 'circle-o', 'url' => ['/mentor/create'],],
+                                ['label' => 'View Mentors', 'icon' => 'circle-o', 'url' => ['/mentor/index'],],
+
+
+
+
+                            ],
+                        ],
+                    ],
+                ]
+            );
+
+
+            echo dmstr\widgets\Menu::widget(
+                [
+                    'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                    'items' => [
+                        [
                             'label' => 'Academic Documents',
                             'icon' => 'building',
                             'url' => '#',
@@ -215,6 +239,49 @@
                                 'items' => [
                                     ['label' => 'Division A', 'icon' => 'circle-o', 'url' => ['/timetable/sem4a']],
                                     ['label' => 'Division B', 'icon' => 'circle-o', 'url' => ['/timetable/sem4b']],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+
+
+
+            echo dmstr\widgets\Menu::widget([
+                'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                'items' => [
+                    [
+                        'label' => 'Random Timetable',
+                        'icon' => 'circle-o',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Random Time Table', 'icon' => 'circle-o', 'url' => ['/randomtimetable/index'],],
+                    
+                    
+
+                            ['label' => 'Semester 1', 'icon' => 'circle-o', 'url' => '#',
+                                'items' => [
+                                    ['label' => 'Division A', 'icon' => 'circle-o', 'url' => ['/randomtimetable/sem1a']],
+                                    ['label' => 'Division B', 'icon' => 'circle-o', 'url' => ['/randomtimetable/sem1b']],
+                                ],
+                            ],
+                            ['label' => 'Semester 2', 'icon' => 'circle-o', 'url' => '#',
+                                'items' => [
+                                    ['label' => 'Division A', 'icon' => 'circle-o', 'url' => ['/randomtimetable/sem2a']],
+                                    ['label' => 'Division B', 'icon' => 'circle-o', 'url' => ['/randomtimetable/sem2b']],
+                                ],
+                            ],
+                            ['label' => 'Semester 3', 'icon' => 'circle-o', 'url' => '#',
+                                'items' => [
+                                    ['label' => 'Division A', 'icon' => 'circle-o', 'url' => ['/randomtimetable/sem3a']],
+                                    ['label' => 'Division B', 'icon' => 'circle-o', 'url' => ['/randomtimetable/sem3b']],
+                                ],
+                            ],
+                            ['label' => 'Semester 4', 'icon' => 'circle-o', 'url' => '#',
+                                'items' => [
+                                    ['label' => 'Division A', 'icon' => 'circle-o', 'url' => ['/randomtimetable/sem4a']],
+                                    ['label' => 'Division B', 'icon' => 'circle-o', 'url' => ['/randomtimetable/sem4b']],
                                 ],
                             ],
                         ],

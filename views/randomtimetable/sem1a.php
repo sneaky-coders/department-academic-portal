@@ -3,6 +3,8 @@
 <?php
 
 use yii\helpers\Html;
+use app\models\Courses;
+use app\models\Faculty;
 
 $this->title = 'Timetable';
 $this->params['breadcrumbs'][] = $this->title;
@@ -22,8 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <h1><?= Html::encode($this->title) ?></h1>
 
 <?php
-$semester = '1';  // Set the desired semester
-$division = 'B';           // Set the desired division
+$semester = '3';  // Set the desired semester
+$division = 'A';           // Set the desired division
 
 $this->params['breadcrumbs'][] = ['label' => 'Sem'.$semester . ' Division ' . $division, 'url' => ['/timetable/index']];
 
@@ -85,32 +87,26 @@ if (empty($timetableData)) {
             // Check if entries exist for this day and timeslot
             if (isset($groupedTimetable[$day][$timeslot])) {
                 // Display entries for each timeslot
-           // Display entries for each timeslot
-foreach ($groupedTimetable[$day][$timeslot] as $entry) {
-    // Fetch related models for additional details
-    $subjectModel = $entry->getSubject()->one(); // Assuming you have a method named getSubject in Timetable model
+                foreach ($groupedTimetable[$day][$timeslot] as $entry) {
+                    // Fetch related models for additional details
+                    $courseModel = Courses::findOne($entry->course_id);
 
-    // Display additional details
-    echo "<p>";
-    echo Html::encode("Course: {$subjectModel->coursename}") . "<br>";
-    echo Html::encode("Course Code: {$subjectModel->coursecode}") . "<br>";
-    echo Html::encode("Semester: {$subjectModel->semester}") . "<br>";
+                    if ($courseModel) {
+                        // Display additional details
+                        echo "<p>";
+                        echo Html::encode("Course: {$courseModel->coursename}") . "<br>";
+                        echo Html::encode("Course Code: {$courseModel->coursecode}") . "<br>";
+                        echo Html::encode("Semester: {$courseModel->semester}") . "<br>";
 
-    // Display faculty details based on lab session
-    if ($entry->labsession == 1) {  // Use $entry->labsession instead of $model->labsession
-        echo "Faculty 1: " . Html::encode($entry->facultyId1->name ?? 'N/A') . "<br>";
-        echo "Faculty 2: " . Html::encode($entry->facultyId2 ? $entry->facultyId2->name : 'N/A') . "<br>";
-        echo "Faculty 3: " . Html::encode($entry->facultyId3 ? $entry->facultyId3->name : 'N/A') . "<br>";
+                        // Display faculty details
+                        echo "Faculty 1: " . ($entry->faculty_id1 ? Faculty::findOne($entry->faculty_id1)->name : 'N/A') . "<br>";
+                        echo "Faculty 2: " . ($entry->faculty_id2 ? Faculty::findOne($entry->faculty_id2)->name : 'N/A') . "<br>";
+                        echo "Faculty 3: " . ($entry->faculty_id3 ? Faculty::findOne($entry->faculty_id3)->name : 'N/A') . "<br>";
 
-        echo Html::encode("Room: {$entry->room}") . "<br>";
-        echo "</p>";
-    } else {
-        echo "Faculty 1: " . Html::encode($entry->facultyId1->name ?? 'N/A') . "<br>";
-        echo Html::encode("Room: {$entry->room}") . "<br>";
-        echo "</p>";
-    }
-}
-
+                        echo Html::encode("Room: {$entry->room}") . "<br>";
+                        echo "</p>";
+                    }
+                }
             }
 
             echo "</td>";

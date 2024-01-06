@@ -4,7 +4,8 @@ namespace app\models;
 
 use Yii;
 use app\models\Courses;
-use app\models\Facultyallotment;
+use app\models\Faculty;
+use app\models\Room;
 
 class Randomtimetable extends \yii\db\ActiveRecord
 {
@@ -14,7 +15,7 @@ class Randomtimetable extends \yii\db\ActiveRecord
     /**
      * Generates a random timetable and saves it to the database.
      *
-     * @return Randomtimetable
+     * @return bool
      * @throws \Throwable
      */
     public function generateRandomTimetable()
@@ -33,31 +34,28 @@ class Randomtimetable extends \yii\db\ActiveRecord
                 $randomRoom = $this->getRandomItem($rooms);
 
                 // Save the timetable entry
-               // Save the timetable entry
-$timetableEntry = new Randomtimetable();
-$timetableEntry->course_id = $randomCourse->id;
-$timetableEntry->semester = $randomCourse->semester; // Provide a value for semester
-$timetableEntry->subject_id = 'Subject'; // Adjust as needed
-$timetableEntry->scheme = '1'; // Adjust as needed
-$timetableEntry->division = 'A'; // Adjust as needed
-$timetableEntry->labsession = '0'; // Adjust as needed
-$timetableEntry->faculty_id1 = $randomFaculty->id;
-$timetableEntry->faculty_id2 = null; // Adjust as needed
-$timetableEntry->faculty_id3 = null; // Adjust as needed
-$timetableEntry->room = $randomRoom->room; // Assuming the room column is used to store the room name
-$timetableEntry->timeslot = $timeslot;
-$timetableEntry->day = $day;
-
+                $timetableEntry = new Randomtimetable();
+                $timetableEntry->course_id = $randomCourse->id;
+                $timetableEntry->semester = '3'; // Adjust as needed
+                $timetableEntry->subject_id = 'Subject'; // Use the current subject
+                $timetableEntry->scheme = '1'; // Adjust as needed
+                $timetableEntry->division = 'A'; // Adjust as needed
+                $timetableEntry->labsession = '0'; // Adjust as needed
+                $timetableEntry->faculty_id1 = $randomFaculty->id;
+                $timetableEntry->faculty_id2 = null; // Adjust as needed
+                $timetableEntry->faculty_id3 = null; // Adjust as needed
+                $timetableEntry->room = 'DS-2'; // Adjust as needed
+                $timetableEntry->timeslot = $timeslot;
+                $timetableEntry->day = $day;
+                $timetableEntry->created_at = date('Y-m-d H:i:s');
 
                 // Check if the entry is already assigned
                 $existingEntry = Randomtimetable::find()
                     ->where([
-                        'OR',
-                        ['faculty_id1' => $randomFaculty->id],
-                        ['faculty_id2' => $randomFaculty->id],
-                        ['faculty_id3' => $randomFaculty->id],
+                        'faculty_id1' => $randomFaculty->id,
+                        'day' => $day,
+                        'timeslot' => $timeslot,
                     ])
-                    ->andWhere(['day' => $day, 'timeslot' => $timeslot])
                     ->exists();
 
                 if (!$existingEntry) {
