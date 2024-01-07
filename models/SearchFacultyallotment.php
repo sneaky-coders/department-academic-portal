@@ -18,7 +18,7 @@ class SearchFacultyallotment extends Facultyallotment
     {
         return [
             [['id', 'faculty_id', 'course_id'], 'integer'],
-            [['semster', 'created_at', 'updated_at'], 'safe'],
+            [['semster', 'division', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -65,7 +65,8 @@ class SearchFacultyallotment extends Facultyallotment
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'semster', $this->semster]);
+        $query->andFilterWhere(['like', 'semster', $this->semster])
+            ->andFilterWhere(['like', 'division', $this->division]);
 
         return $dataProvider;
     }

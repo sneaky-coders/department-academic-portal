@@ -24,8 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <h1><?= Html::encode($this->title) ?></h1>
 
 <?php
-$semester = '3';  // Set the desired semester
-$division = 'A';           // Set the desired division
+$semester = '1';  // Set the desired semester
+$division = 'A';   // Set the desired division
 
 $this->params['breadcrumbs'][] = ['label' => 'Sem'.$semester . ' Division ' . $division, 'url' => ['/timetable/index']];
 
@@ -33,20 +33,16 @@ echo "<div class='header'>";
 echo "<h2>Sem :{$semester} Div - {$division}</h2>";
 echo "</div>";
 
+// If there is no timetable data, display a message
 if (empty($timetableData)) {
     echo "<p>No timetable entries available.</p>";
 } else {
-    // Filter timetable data for the selected semester and division
-    $filteredTimetable = array_filter($timetableData, function ($entry) use ($semester, $division) {
-        return $entry->semester === $semester && $entry->division === $division;
-    });
-
-    // Group filtered timetable entries by day and timeslot
+    // Group timetable entries by day and timeslot
     $groupedTimetable = [];
     $allTimeslots = [];
     $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-    foreach ($filteredTimetable as $entry) {
+    foreach ($timetableData as $entry) {
         $day = $entry->day;
         $timeslot = $entry->timeslot;
 
@@ -54,8 +50,25 @@ if (empty($timetableData)) {
         $allTimeslots[$timeslot] = true;
     }
 
-    // Sort timeslots in ascending order
-    ksort($allTimeslots);
+    // Hardcoded tea break entry for Monday from 12:45pm to 1:00pm
+    $teaBreakDay = 'Monday';
+    $teaBreakTimeslot = '12:45pm - 1:00pm';
+    $teaBreakRoom = 'Tea Break Room';
+
+    // Hardcoded lunch break entry for Monday from 3:00pm to 3:30pm
+    $lunchBreakDay = 'Monday';
+    $lunchBreakTimeslot = '3:00pm - 3:30pm';
+    $lunchBreakRoom = 'Lunch Break Room';
+
+    // Sort timeslots in the desired order
+    $sortedTimeslots = array_keys($allTimeslots);
+    usort($sortedTimeslots, function ($a, $b) {
+        $format = 'h:ia'; // Format of timeslots, adjust as needed
+        $timeA = DateTime::createFromFormat($format, $a);
+        $timeB = DateTime::createFromFormat($format, $b);
+
+        return $timeA <=> $timeB;
+    });
 
     echo "<div class='table-responsive'>"; // Make the table responsive
 
@@ -63,13 +76,13 @@ if (empty($timetableData)) {
 
     // Display header row with timeslots and days
     echo "<thead><tr>";
-    echo "<th colspan='" . (count($allTimeslots) + 1) . "' class='text-center'>Sem {$semester} Div - {$division}</th>"; // Span across all timeslots
+    echo "<th colspan='" . (count($sortedTimeslots) + 1) . "' class='text-center'>Sem {$semester} Div - {$division}</th>"; // Span across all timeslots
     echo "</tr><tr>"; // Add a new row
 
     echo "<th>Day/Time Slot</th>";
 
-    // Display timeslots
-    foreach (array_keys($allTimeslots) as $timeslot) {
+    // Display sorted timeslots
+    foreach ($sortedTimeslots as $timeslot) {
         echo "<th>{$timeslot}</th>";
     }
 
@@ -81,7 +94,7 @@ if (empty($timetableData)) {
         echo "<tr>";
         echo "<th>{$day}</th>"; // Display day in th
 
-        foreach (array_keys($allTimeslots) as $timeslot) {
+        foreach ($sortedTimeslots as $timeslot) {
             echo "<td>";
 
             // Check if entries exist for this day and timeslot
@@ -100,13 +113,18 @@ if (empty($timetableData)) {
 
                         // Display faculty details
                         echo "Faculty 1: " . ($entry->faculty_id1 ? Faculty::findOne($entry->faculty_id1)->name : 'N/A') . "<br>";
-                        echo "Faculty 2: " . ($entry->faculty_id2 ? Faculty::findOne($entry->faculty_id2)->name : 'N/A') . "<br>";
-                        echo "Faculty 3: " . ($entry->faculty_id3 ? Faculty::findOne($entry->faculty_id3)->name : 'N/A') . "<br>";
+                       
 
                         echo Html::encode("Room: {$entry->room}") . "<br>";
                         echo "</p>";
                     }
                 }
+            } elseif ($day === $teaBreakDay && $timeslot === $teaBreakTimeslot) {
+                // Display tea break entry
+                echo "<p>Tea Break: {$teaBreakRoom}</p>";
+            } elseif ($day === $lunchBreakDay && $timeslot === $lunchBreakTimeslot) {
+                // Display lunch break entry
+                echo "<p>Lunch Break: {$lunchBreakRoom}</p>";
             }
 
             echo "</td>";

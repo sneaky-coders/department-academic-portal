@@ -30,6 +30,11 @@ use app\models\Courses;  // Assuming your Course model is in the "app\models" na
         ['prompt' => 'Select Semester']
     ) ?>
 
+<?= $form->field($model, 'division')->dropDownList(
+        ['A' => 'A', 'B' => 'B','A/B' => 'A/B'],
+        ['prompt' => 'Select Division']
+    ) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

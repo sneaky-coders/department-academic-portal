@@ -8,7 +8,8 @@ class Randomtimetable extends \yii\db\ActiveRecord
 {
     public $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     public $timeslots = [
-        '10:00 AM - 10:55 AM', '10:55 AM - 11:50 AM', '11:50 AM - 12:45 PM', '1 PM - 1:55 PM', '3:30 PM - 4:25 PM'
+        '10:00 AM - 10:55 AM', '10:55 AM - 11:50 AM', '11:50 AM - 12:45 AM',
+        '1 PM - 3 PM', '1 PM - 1:55 PM', '3:30 PM - 4:25 PM'
     ];
 
     public $coursename;
@@ -48,64 +49,63 @@ class Randomtimetable extends \yii\db\ActiveRecord
     }
 
     private function generateRandomEntry($facultiesAllotments, $rooms, $day, $timeslot)
-{
-    $randomFacultyAllotment = $this->getRandomItem($facultiesAllotments);
-    $randomRoom = $this->getRandomItem($rooms);
+    {
+        $randomFacultyAllotment = $this->getRandomItem($facultiesAllotments);
+        $randomRoom = $this->getRandomItem($rooms);
 
-    // Check if there's already an entry for the same timeslot and day in the division
-    if ($this->entryExistsForTimeslotAndDayInDivision($randomFacultyAllotment, $day, $timeslot)) {
-        return; // Skip creating a new entry
-    }
+        // Check if there's already an entry for the same timeslot and day in the division
+        if ($this->entryExistsForTimeslotAndDayInDivision($randomFacultyAllotment, $day, $timeslot)) {
+            return; // Skip creating a new entry
+        }
 
-    // Additional check to skip allocation for courses with names ending with "Lab" and credits equal to 2
-    if ($this->shouldSkipAllocation($randomFacultyAllotment)) {
-        return;
-    }
+        // Additional check to skip allocation for courses with names ending with "Lab" and credits equal to 2
+        if ($this->shouldSkipAllocation($randomFacultyAllotment)) {
+            return;
+        }
 
-    // Check if the course is already scheduled on the same day
-    if ($this->isCourseAlreadyScheduledOnDay($randomFacultyAllotment->faculty_id, $day)) {
-        return; // Skip creating a new entry for the same course on the same day
-    }
+        // Check if the course is already scheduled on the same day
+        if ($this->isCourseAlreadyScheduledOnDay($randomFacultyAllotment->faculty_id, $day)) {
+            return; // Skip creating a new entry for the same course on the same day
+        }
 
-    $timetableEntry = new Randomtimetable();
-    $timetableEntry->course_id = $randomFacultyAllotment->course_id;
-    $timetableEntry->coursename = $randomFacultyAllotment->course->coursename;
-    $timetableEntry->semester = $randomFacultyAllotment->semster;
-    $timetableEntry->subject_id = $this->generateRandomSubject($timetableEntry->coursename);
-    $timetableEntry->scheme = '1';
-    $timetableEntry->division = $randomFacultyAllotment->division;
-    $timetableEntry->labsession = $this->isLabSession($timetableEntry->course_id) ? 'Yes' : 'No';
-    $timetableEntry->faculty_id1 = $randomFacultyAllotment->faculty_id;
-
-    // Check if the course has 0 or more than 2 credits and adjust the number of classes accordingly
-    if ($this->isCourseWithZeroOrMoreThanTwoClasses($timetableEntry->course_id)) {
-        // For courses with 0 or more than 2 credits, allow up to 4 classes per week
+        $timetableEntry = new Randomtimetable();
+        $timetableEntry->course_id = $randomFacultyAllotment->course_id;
+        $timetableEntry->coursename = $randomFacultyAllotment->course->coursename;
+        $timetableEntry->semester = $randomFacultyAllotment->semster;
+        $timetableEntry->subject_id = $this->generateRandomSubject($timetableEntry->coursename);
+        $timetableEntry->scheme = '1';
+        $timetableEntry->division = $randomFacultyAllotment->division;
+        $timetableEntry->labsession = $this->isLabSession($timetableEntry->course_id) ? 'Yes' : 'No';
+        $timetableEntry->faculty_id1 = $randomFacultyAllotment->faculty_id;
         $timetableEntry->faculty_id2 = $this->getRandomFaculty($facultiesAllotments, $randomFacultyAllotment->faculty_id);
-        $timetableEntry->faculty_id3 = $this->getRandomFaculty($facultiesAllotments, $randomFacultyAllotment->faculty_id, $timetableEntry->faculty_id2);
+
+        // Check if the course has credits 2 and is a lab session
+        if ($this->isLabSessionWithCreditsTwo($timetableEntry->course_id)) {
+            // For lab sessions with credits 2, have 3 faculties allotted
+            $timetableEntry->faculty_id3 = $this->getRandomFaculty($facultiesAllotments, $randomFacultyAllotment->faculty_id, $timetableEntry->faculty_id2);
+        } else {
+            // For other cases, set faculty_id3 to null
+            $timetableEntry->faculty_id3 = null;
+        }
+
         $timetableEntry->room = $randomRoom->name;
         $timetableEntry->timeslot = $timeslot;
         $timetableEntry->day = $day;
         $timetableEntry->created_at = new \yii\db\Expression('NOW()');
-        $timetableEntry->save();
-    } else {
-        // Ensure that only courses with credits 2 are allotted in the '1 PM - 3 PM' slot
-        if ($this->isLabSessionWithCreditsTwo($timetableEntry->course_id)) {
-            $timetableEntry->room = $randomRoom->name;
-            $timetableEntry->timeslot = '1 PM - 3 PM'; // Force the timeslot to '1 PM - 3 PM'
-            $timetableEntry->day = $day;
-            $timetableEntry->created_at = new \yii\db\Expression('NOW()');
+
+        // Check if the course has 0 or more than 2 credits and adjust the number of classes accordingly
+        if ($this->isCourseWithZeroOrMoreThanTwoClasses($timetableEntry->course_id)) {
+            // For courses with 0 or more than 2 credits, allow up to 4 classes per week
             $timetableEntry->save();
         } else {
-            // For other cases, set faculty_id3 to null
-            $timetableEntry->faculty_id3 = null;
-            $timetableEntry->room = $randomRoom->name;
-            $timetableEntry->timeslot = $timeslot;
-            $timetableEntry->day = $day;
-            $timetableEntry->created_at = new \yii\db\Expression('NOW()');
+            // Ensure that only courses with credits 2 are allotted in the '1 PM - 3 PM' slot
+            if ($this->isLabSessionWithCreditsTwo($timetableEntry->course_id) && $timeslot !== '1 PM - 3 PM') {
+                return; // Skip lab session for other timeslots
+            }
+
             $timetableEntry->save();
         }
     }
-}
 
     // New method to check if an entry exists for the same timeslot and day in the division
     private function entryExistsForTimeslotAndDayInDivision($randomFacultyAllotment, $day, $timeslot)
@@ -121,21 +121,11 @@ class Randomtimetable extends \yii\db\ActiveRecord
     }
 
     // New method to check whether to skip allocation for specific courses
-  // New method to check whether to skip allocation for specific courses
-// New method to check whether to skip allocation for specific courses
-private function shouldSkipAllocation($randomFacultyAllotment)
-{
-    $courseModel = Courses::findOne(['id' => $randomFacultyAllotment->course_id]);
-
-    // Skip allocation for courses with credits equal to 2
-    if ($courseModel && $courseModel->credits == 2) {
-        return true;
+    private function shouldSkipAllocation($randomFacultyAllotment)
+    {
+        $courseModel = Courses::findOne(['id' => $randomFacultyAllotment->course_id]);
+        return $courseModel && $courseModel->credits == 2 && strpos($courseModel->coursename, 'Lab') !== false;
     }
-
-    return false;
-}
-
-
 
     // New method to check if a course is already scheduled on the same day
     private function isCourseAlreadyScheduledOnDay($facultyId, $day)
@@ -186,8 +176,6 @@ private function shouldSkipAllocation($randomFacultyAllotment)
         $courseModel = Courses::findOne(['id' => $courseId]);
         return $courseModel && $courseModel->credits == 2;
     }
-
-    // ...
 
     public static function tableName()
     {

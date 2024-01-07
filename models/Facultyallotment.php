@@ -11,6 +11,7 @@ use Yii;
  * @property int $faculty_id
  * @property int $course_id
  * @property string $semster
+ * @property string $division
  * @property string $created_at
  * @property string|null $updated_at
  *
@@ -33,10 +34,11 @@ class Facultyallotment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['faculty_id', 'course_id', 'semster'], 'required'],
+            [['faculty_id', 'course_id', 'semster', 'division'], 'required'],
             [['faculty_id', 'course_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['semster'], 'string', 'max' => 5],
+            [['division'], 'string', 'max' => 10],
             [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Courses::className(), 'targetAttribute' => ['course_id' => 'id']],
             [['faculty_id'], 'exist', 'skipOnError' => true, 'targetClass' => Faculty::className(), 'targetAttribute' => ['faculty_id' => 'id']],
         ];
@@ -52,6 +54,7 @@ class Facultyallotment extends \yii\db\ActiveRecord
             'faculty_id' => 'Faculty ID',
             'course_id' => 'Course ID',
             'semster' => 'Semster',
+            'division' => 'Division',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

@@ -77,6 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'course.coursecode', // Assuming 'course_code' is another attribute in the Course model
             'course.semester',  // Assuming 'description' is yet another attribute in the Course model
             'course.credits',  // Assuming 'description' is yet another attribute in the Course model
+            'division',  // Assuming 'description' is yet another attribute in the Course model
             // Add more columns if needed
         ],
     ]); ?>
