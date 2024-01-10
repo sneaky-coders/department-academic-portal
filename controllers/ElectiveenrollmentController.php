@@ -1,87 +1,127 @@
 <?php
 
-namespace app\models;
+namespace app\controllers;
 
 use Yii;
-use app\models\Courses;
-use app\models\Facultyallotment;
+use app\models\Electiveenrollment;
+use app\models\SearchElectiveenrollment;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
-class Randomtimetable extends \yii\db\ActiveRecord
+/**
+ * ElectiveenrollmentController implements the CRUD actions for Electiveenrollment model.
+ */
+class ElectiveenrollmentController extends Controller
 {
-    public $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    public $timeslots = ['10:00 AM - 10:55 AM', '10:55 AM - 11:50 AM', '11:50 AM - 12:45 AM', '1 PM - 3 PM', '1 PM - 1:55 PM', '3:30 PM - 4:25 PM'];
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
 
     /**
-     * Generates a random timetable and saves it to the database.
-     *
-     * @return Randomtimetable
-     * @throws \Throwable
+     * Lists all Electiveenrollment models.
+     * @return mixed
      */
-    public function generateRandomTimetable()
+    public function actionIndex()
     {
-        // Get all faculties, courses, and rooms
-        $faculties = Faculty::find()->all();
-        $courses = Courses::find()->all();
-        $rooms = Room::find()->all();
+        $searchModel = new SearchElectiveenrollment();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        // Iterate over days and timeslots
-        foreach ($this->days as $day) {
-            foreach ($this->timeslots as $timeslot) {
-                // Randomly select a faculty, course, and room
-                $randomFaculty = $this->getRandomItem($faculties);
-                $randomCourse = $this->getRandomItem($courses);
-                $randomRoom = $this->getRandomItem($rooms);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
-                // Save the timetable entry
-               // Save the timetable entry
-$timetableEntry = new Randomtimetable();
-$timetableEntry->course_id = $randomCourse->id;
-$timetableEntry->semester = $randomCourse->semester; // Provide a value for semester
-$timetableEntry->subject_id = 'Subject'; // Adjust as needed
-$timetableEntry->scheme = '1'; // Adjust as needed
-$timetableEntry->division = 'A'; // Adjust as needed
-$timetableEntry->labsession = '0'; // Adjust as needed
-$timetableEntry->faculty_id1 = $randomFaculty->id;
-$timetableEntry->faculty_id2 = null; // Adjust as needed
-$timetableEntry->faculty_id3 = null; // Adjust as needed
-$timetableEntry->room = $randomRoom->room; // Assuming the room column is used to store the room name
-$timetableEntry->timeslot = $timeslot;
-$timetableEntry->day = $day;
+    /**
+     * Displays a single Electiveenrollment model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 
+    /**
+     * Creates a new Electiveenrollment model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+        $model = new Electiveenrollment();
 
-                // Check if the entry is already assigned
-                $existingEntry = Randomtimetable::find()
-                    ->where([
-                        'OR',
-                        ['faculty_id1' => $randomFaculty->id],
-                        ['faculty_id2' => $randomFaculty->id],
-                        ['faculty_id3' => $randomFaculty->id],
-                    ])
-                    ->andWhere(['day' => $day, 'timeslot' => $timeslot])
-                    ->exists();
-
-                if (!$existingEntry) {
-                    $timetableEntry->save();
-                }
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return true;
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
-     * Helper function to get a random item from an array.
-     *
-     * @param array $items
-     * @return mixed|null
+     * Updates an existing Electiveenrollment model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
-    private function getRandomItem($items)
+    public function actionUpdate($id)
     {
-        return !empty($items) ? $items[array_rand($items)] : null;
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
-    public static function tableName()
+    /**
+     * Deletes an existing Electiveenrollment model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id)
     {
-        return 'randomtimetable';
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the Electiveenrollment model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Electiveenrollment the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Electiveenrollment::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }
