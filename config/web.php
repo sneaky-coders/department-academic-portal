@@ -71,8 +71,13 @@ $config = [
     ],
     'modules' => [
 
-        'gridview' => ['class' => 'kartik\grid\Module']
+        'gridview' => ['class' => 'kartik\grid\Module'],
+        'calendar' => [
+            'class' => 'edofre\fullcalendar\Module',
+            // Additional configuration options if needed
+        ],
     ],
+    
     'params' => $params,
     
     

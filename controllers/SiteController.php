@@ -15,6 +15,7 @@ use app\controller\ContactForm;
 
 use app\models\Task;
 use app\models\Deadlines;
+use app\models\Events;
 
 
 class SiteController extends Controller
@@ -69,14 +70,27 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $tasks = Deadlines::find()
-        ->orderBy(['created_at' => SORT_DESC])
-        ->limit(3)
-        ->all(); // Replace with your actual data retrieval logic
-
+            ->orderBy(['created_at' => SORT_DESC])
+            ->limit(3)
+            ->all(); 
+    
+        $events = [];
+        foreach (Events::find()->all() as $event) {
+            $events[] = [
+                'title' => $event->title,
+                'start' => $event->startdate, // Assuming 'startdate' is the attribute for the start date
+                'end' => $event->enddate,     // Assuming 'enddate' is the attribute for the end date
+                'desciption' => $event->desciption,
+                // Add other event properties as needed
+            ];
+        }
+    
         return $this->render('index', [
             'tasks' => $tasks,
+            'events' => $events
         ]);
     }
+    
 
  
 

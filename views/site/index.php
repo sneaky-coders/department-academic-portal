@@ -92,4 +92,15 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         <?php endforeach; ?>
     </div>
+
+    <?= \edofre\fullcalendar\Fullcalendar::widget([
+    'events' => $events,
+    'clientOptions' => [
+        'eventRender' => new \yii\web\JsExpression('function(event, element) {
+            element.css("background-color", "green");
+            element.find(".fc-title").append("<br/><span style=\'font-size:12px;\'><strong>Description:</strong> " + event.desciption + "</span>");
+        }'),
+    ],
+]); ?>
+
 </div>
