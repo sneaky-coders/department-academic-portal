@@ -60,6 +60,10 @@ class ComposerStaticInit3e52b334f41f0782e43832adc643e3bd
             'kartik\\dialog\\' => 14,
             'kartik\\base\\' => 12,
         ),
+        'e' => 
+        array (
+            'edofre\\fullcalendar\\' => 20,
+        ),
         'd' => 
         array (
             'dosamigos\\chartjs\\' => 18,
@@ -220,6 +224,10 @@ class ComposerStaticInit3e52b334f41f0782e43832adc643e3bd
         'kartik\\base\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base/src',
+        ),
+        'edofre\\fullcalendar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/edofre/yii2-fullcalendar/src',
         ),
         'dosamigos\\chartjs\\' => 
         array (
