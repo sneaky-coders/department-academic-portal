@@ -1,22 +1,42 @@
 <style>
     /* Customize the color scheme for the sidebar */
     body.skin-blue .main-sidebar {
-        background-color: #343a40 !important; /* Set the background color */
-        color: #c2c7d0 !important; /* Set the text color */
+        background-color: #007bff !important; /* Set the background color to #007bff */
+        color: #FFFFFF !important; /* Set the text color to white */
     }
 
     body.skin-blue .main-sidebar a {
-        color: #c2c7d0 !important; /* Set the link color */
+        color: #FFFFFF !important; /* Set the link color to white */
     }
 
-    body.skin-blue .main-sidebar .sidebar-menu a:hover {
-        background-color: #495057 !important; /* Set the background color for hovered links */
+    body.skin-blue .main-sidebar .sidebar-menu a:hover,
+    body.skin-blue .main-sidebar .sidebar-menu li.active a {
+        background-color: #0056b3 !important; /* Set the background color for hovered and active links */
     }
 
     body.skin-blue .main-sidebar .treeview-menu {
-        background-color: #343a40 !important; /* Set the background color for submenu */
+        background-color: #007bff !important; /* Set the background color for submenu to #007bff */
+    }
+
+    /* Adjust styles for the expanded state (open) */
+    body.sidebar-mini.sidebar-collapse .main-sidebar {
+        background-color: #007bff !important; /* Set the background color to #007bff when collapsed */
+    }
+
+    body.sidebar-mini.sidebar-collapse .main-sidebar a {
+        color: #FFFFFF !important; /* Set the link color to white when collapsed */
+    }
+
+    body.sidebar-mini.sidebar-collapse .main-sidebar .treeview-menu {
+        background-color: #007bff !important; /* Set the background color for submenu to #007bff when collapsed */
+    }
+    .skin-blue .sidebar-menu>li.menu-open>a
+    {
+        background :  #007bff;
     }
 </style>
+
+
 
 <aside class="main-sidebar">
 
