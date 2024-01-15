@@ -2,8 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
 
-$this->title = 'DeadLines';
+
+$this->title = 'Dashboard';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -60,47 +62,62 @@ $this->params['breadcrumbs'][] = $this->title;
 </style>
 
 <div class="container">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <div class="row">
-        <?php foreach ($tasks as $task): ?>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><?= Html::encode($task->title) ?></h3>
-                    </div>
-                    <div class="card-body">
-                        <?= DetailView::widget([
-                            'model' => $task,
-                            'attributes' => [
-                                [
-                                    'label' => 'Title',
-                                    'value' => $task->title,
-                                    'options' => ['class' => 'card-attribute'],
+    <?php if (Yii::$app->user->identity->level == 2): ?>
+        <div class="row">
+            <?php foreach ($tasks as $task): ?>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title"><?= Html::encode($task->title) ?></h3>
+                        </div>
+                        <div class="card-body">
+                            <?= DetailView::widget([
+                                'model' => $task,
+                                'attributes' => [
+                                    [
+                                        'label' => 'Title',
+                                        'value' => $task->title,
+                                        'options' => ['class' => 'card-attribute'],
+                                    ],
+                                    [
+                                        'label' => 'Description',
+                                        'value' => $task->description,
+                                        'options' => ['class' => 'card-attribute'],
+                                    ],
+                                    // Add more attributes as needed
                                 ],
-                                [
-                                    'label' => 'Description',
-                                    'value' => $task->description,
-                                    'options' => ['class' => 'card-attribute'],
-                                ],
-                                // Add more attributes as needed
-                            ],
-                        ]) ?>
-                        <?= Html::a('View Details', ['task/view', 'id' => $task->id], ['class' => 'btn btn-details']) ?>
+                            ]) ?>
+                            <?= Html::a('View Details', ['task/view', 'id' => $task->id], ['class' => 'btn btn-details']) ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-
-    <?= \edofre\fullcalendar\Fullcalendar::widget([
-    'events' => $events,
-    'clientOptions' => [
-        'eventRender' => new \yii\web\JsExpression('function(event, element) {
-            element.css("background-color", "green");
-            element.find(".fc-title").append("<br/><span style=\'font-size:12px;\'><strong>Description:</strong> " + event.desciption + "</span>");
-        }'),
-    ],
-]); ?>
-
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <?= \edofre\fullcalendar\Fullcalendar::widget([
+            'options' => [
+                'class' => 'custom-calendar-container', // Add a custom CSS class
+            ],
+            'events' => $events,
+            'clientOptions' => [
+                'eventRender' => new \yii\web\JsExpression('function(event, element) {
+                    element.css("background-color", "green");
+                    element.find(".fc-title").append("<br/><span style=\'font-size:12px;\'><strong>Description:</strong> " + event.description + "</span>");
+                    element.click(function() {
+                        window.location.href = "' . Url::to(['task/view']) . '?id=" + event.id;
+                    });
+                }'),
+            ],
+        ]); ?>
+    <?php endif; ?>
 </div>
+
+<style>
+    /* Add custom styles for the FullCalendar container */
+    .custom-calendar-container {
+        border: 1px solid white; /* Blue border color */
+        border-radius: 10px;
+        max-width: 70%; /* Adjust the maximum width as needed */
+        margin: 20px auto; /* Center the calendar on the page */
+    }
+</style>

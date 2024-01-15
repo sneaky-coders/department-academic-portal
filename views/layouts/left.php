@@ -79,6 +79,41 @@
                 ]
             );
 
+
+            echo dmstr\widgets\Menu::widget(
+                [
+                    'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                    'items' => [
+                        [
+                            'label' => 'Events',
+                            'icon' => 'bell',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Add Events', 'icon' => 'circle-o', 'url' => ['/events/create'],],
+                                ['label' => 'View Events', 'icon' => 'circle-o', 'url' => ['/events'],],
+                            ],
+                        ],
+                    ],
+                ]
+            );
+
+            echo dmstr\widgets\Menu::widget(
+                [
+                    'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                    'items' => [
+                        [
+                            'label' => 'Corse Documents',
+                            'icon' => 'book',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Add Documents', 'icon' => 'circle-o', 'url' => ['/impfiles/create'],],
+                                ['label' => 'View Documents', 'icon' => 'circle-o', 'url' => ['/impfiles'],],
+                            ],
+                        ],
+                    ],
+                ]
+            );
+
             echo dmstr\widgets\Menu::widget(
                 [
                     'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
@@ -358,6 +393,8 @@
                     ],
                 ]
             );
+
+            
 
         }
         ?>

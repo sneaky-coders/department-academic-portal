@@ -14,7 +14,7 @@ use yii\helpers\Url;
 $url = Url::to(['/students/get-user-details']);
 
 $script = <<< JS
-    $('#faculty-user_id').change(function() {
+    $('#students-user_id').change(function() {
         var userId = $(this).val();
         if (userId !== '') {
             $.ajax({
@@ -46,7 +46,7 @@ $this->registerJs($script, yii\web\View::POS_READY);
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'user_id')->dropDownList(
-        ArrayHelper::map(Users::find()->all(), 'id', 'username'),
+        ArrayHelper::map(Users::find()->where(['level' => 3])->all(), 'id', 'username'),
         ['prompt' => 'Select User']
     )->label('Username') ?>
 
@@ -57,6 +57,12 @@ $this->registerJs($script, yii\web\View::POS_READY);
     <?= $form->field($model, 'contact')->textInput()->label('Contact') ?>
 
     <?= $form->field($model, 'usn')->textInput(['maxlength' => true])->label('USN') ?>
+
+    <?= $form->field($model, 'division')->dropDownList(
+    ['A' => 'A', 'B' => 'B'],
+    ['prompt' => 'Select Division']
+)->label('Division') ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

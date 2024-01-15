@@ -69,7 +69,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $tasks = Deadlines::find()
+        if(!Yii::$app->user->isGuest)
+        {
+            $tasks = Deadlines::find()
             ->orderBy(['created_at' => SORT_DESC])
             ->limit(3)
             ->all(); 
@@ -89,10 +91,16 @@ class SiteController extends Controller
             'tasks' => $tasks,
             'events' => $events
         ]);
+        }
+        else
+        {
+            return $this->redirect(['login']);
+        }
+       
     }
     
 
- 
+   
 
     /**
      * Login action.

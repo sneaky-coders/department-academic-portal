@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Students;
+use app\models\Impfiles;
 
 /**
- * SearchStudents represents the model behind the search form of `app\models\Students`.
+ * SearchImpfiles represents the model behind the search form of `app\models\Impfiles`.
  */
-class SearchStudents extends Students
+class SearchImpfiles extends Impfiles
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class SearchStudents extends Students
     public function rules()
     {
         return [
-            [['id', 'user_id', 'contact'], 'integer'],
-            [['name', 'email', 'usn', 'batch', 'division', 'created_at', 'updated_at'], 'safe'],
+            [['id'], 'integer'],
+            [['title', 'file', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class SearchStudents extends Students
      */
     public function search($params)
     {
-        $query = Students::find();
+        $query = Impfiles::find();
 
         // add conditions that should always apply here
 
@@ -59,17 +59,12 @@ class SearchStudents extends Students
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'contact' => $this->contact,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'usn', $this->usn])
-            ->andFilterWhere(['like', 'batch', $this->batch])
-            ->andFilterWhere(['like', 'division', $this->division]);
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'file', $this->file]);
 
         return $dataProvider;
     }

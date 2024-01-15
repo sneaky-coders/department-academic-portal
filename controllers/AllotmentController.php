@@ -37,27 +37,43 @@ class AllotmentController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new SearchAllotment();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        // Add filtering rules
-        $searchModel->setAttributes(Yii::$app->request->get('SearchAllotment'));
-
-        // Other code for data provider initialization
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        if(!Yii::$app->user->isGuest)
+        {
+            $searchModel = new SearchAllotment();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    
+            // Add filtering rules
+            $searchModel->setAttributes(Yii::$app->request->get('SearchAllotment'));
+    
+            // Other code for data provider initialization
+    
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     public function actionRandom()
     {
-        $model = new Allotment();
+        if(Yii::$app->user->isGuest)
+        {
+            $model = new Allotment();
 
         return $this->render('randomallotment', [
             'model' => $model,
         ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+        
     }
 
     /**
@@ -68,9 +84,17 @@ class AllotmentController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(!Yii::$app->user->isGuest)
+        {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**
@@ -80,11 +104,19 @@ class AllotmentController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Allotment();
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = new Allotment();
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     /**
@@ -96,17 +128,25 @@ class AllotmentController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+    
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+     
     }
-
+   
     /**
      * Deletes an existing Allotment model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -116,9 +156,18 @@ class AllotmentController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(!Yii::$app->user->isGuest)
+        {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+        
+       
     }
 
     /**

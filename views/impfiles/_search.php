@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\SearchStudents */
+/* @var $model app\models\SearchImpfiles */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="students-search">
+<div class="impfiles-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,23 +17,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'user_id') ?>
+    <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'name') ?>
+    <?= $form->field($model, 'file') ?>
 
-    <?= $form->field($model, 'email') ?>
+    <?= $form->field($model, 'created_at') ?>
 
-    <?= $form->field($model, 'usn') ?>
-
-    <?php // echo $form->field($model, 'contact') ?>
-
-    <?php // echo $form->field($model, 'batch') ?>
-
-    <?php // echo $form->field($model, 'division') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
+    <?= $form->field($model, 'updated_at') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

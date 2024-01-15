@@ -4,18 +4,18 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\SearchStudents */
+/* @var $searchModel app\models\SearchImpfiles */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Students';
+$this->title = 'Impfiles';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="students-index">
+<div class="impfiles-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Students', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Impfiles', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -27,15 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'user_id',
-            'name',
-            'email:email',
-            'usn',
-            //'contact',
-            //'batch',
-            //'division',
-            //'created_at',
-            //'updated_at',
+            'title',
+            'file',
+            'created_at',
+            'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
