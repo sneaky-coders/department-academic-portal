@@ -39,13 +39,21 @@ class TimetableController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new SearchTimetable();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        if(!Yii::$app->user->isGuest)
+        {
+            $searchModel = new SearchTimetable();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
    
@@ -66,9 +74,17 @@ class TimetableController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(!Yii::$app->user->isGuest)
+        {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**
@@ -78,58 +94,66 @@ class TimetableController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Timetable();
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = new Timetable();
     
-        if (!$model->load(Yii::$app->request->post())) {
+            if (!$model->load(Yii::$app->request->post())) {
+                return $this->render('create', ['model' => $model]);
+            }
+        
+            // Check if a record already exists for the specified day, time, and faculty
+            if ($this->checkRecordExists($model->timeslot, $model->day, $model->faculty_id1)
+                || $this->checkRecordExists($model->timeslot, $model->day, $model->faculty_id2)
+                || $this->checkRecordExists($model->timeslot, $model->day, $model->faculty_id3)) {
+        
+                $facultyName = $this->getFacultyName($model->faculty_id1);
+                Yii::$app->session->setFlash('error', "A record already exists for $facultyName in the selected timeslot, day, and faculty.");
+                return $this->render('create', ['model' => $model]);
+            }
+        
+            // Check faculty availability before saving
+            if (!$this->checkFacultyAvailability($model->timeslot, $model->day, $model->faculty_id1)
+                || !$this->checkFacultyAvailability($model->timeslot, $model->day, $model->faculty_id2)
+                || !$this->checkFacultyAvailability($model->timeslot, $model->day, $model->faculty_id3)) {
+        
+                $facultyName = $this->getFacultyName($model->faculty_id1);
+                $semester = $model->semester;
+                $time = $model->timeslot;
+                Yii::$app->session->setFlash('error', "Faculty $facultyName is not available in the selected timeslot ($time) and day for semester $semester.");
+                return $this->render('create', ['model' => $model]);
+            }
+        
+            // Save the model if everything is okay
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        
+            // Handle the case where saving the model fails
+            Yii::$app->session->setFlash('error', 'An error occurred while saving the timetable entry.');
             return $this->render('create', ['model' => $model]);
         }
-    
-        // Check if a record already exists for the specified day, time, and faculty
-        if ($this->checkRecordExists($model->timeslot, $model->day, $model->faculty_id1)
-            || $this->checkRecordExists($model->timeslot, $model->day, $model->faculty_id2)
-            || $this->checkRecordExists($model->timeslot, $model->day, $model->faculty_id3)) {
-    
-            $facultyName = $this->getFacultyName($model->faculty_id1);
-            Yii::$app->session->setFlash('error', "A record already exists for $facultyName in the selected timeslot, day, and faculty.");
-            return $this->render('create', ['model' => $model]);
+        
+        // Helper method to get faculty name by ID
+        private function getFacultyName($facultyId)
+        {
+            $faculty = Faculty::findOne($facultyId);
+            return $faculty ? $faculty->name : 'Unknown Faculty';
         }
-    
-        // Check faculty availability before saving
-        if (!$this->checkFacultyAvailability($model->timeslot, $model->day, $model->faculty_id1)
-            || !$this->checkFacultyAvailability($model->timeslot, $model->day, $model->faculty_id2)
-            || !$this->checkFacultyAvailability($model->timeslot, $model->day, $model->faculty_id3)) {
-    
-            $facultyName = $this->getFacultyName($model->faculty_id1);
-            $semester = $model->semester;
-            $time = $model->timeslot;
-            Yii::$app->session->setFlash('error', "Faculty $facultyName is not available in the selected timeslot ($time) and day for semester $semester.");
-            return $this->render('create', ['model' => $model]);
+        
+        private function checkRecordExists($timeslot, $day, $facultyId)
+        {
+            return Timetable::find()
+                ->andWhere(['timeslot' => $timeslot, 'day' => $day])
+                ->andWhere(['OR', ['faculty_id1' => $facultyId], ['faculty_id2' => $facultyId], ['faculty_id3' => $facultyId]])
+                ->exists();
         }
-    
-        // Save the model if everything is okay
-        if ($model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
         }
-    
-        // Handle the case where saving the model fails
-        Yii::$app->session->setFlash('error', 'An error occurred while saving the timetable entry.');
-        return $this->render('create', ['model' => $model]);
-    }
-    
-    // Helper method to get faculty name by ID
-    private function getFacultyName($facultyId)
-    {
-        $faculty = Faculty::findOne($facultyId);
-        return $faculty ? $faculty->name : 'Unknown Faculty';
-    }
-    
-    private function checkRecordExists($timeslot, $day, $facultyId)
-    {
-        return Timetable::find()
-            ->andWhere(['timeslot' => $timeslot, 'day' => $day])
-            ->andWhere(['OR', ['faculty_id1' => $facultyId], ['faculty_id2' => $facultyId], ['faculty_id3' => $facultyId]])
-            ->exists();
-    }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
 
     
 
@@ -142,15 +166,23 @@ class TimetableController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+    
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**
@@ -162,9 +194,17 @@ class TimetableController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(!Yii::$app->user->isGuest)
+        {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     public function actionSem1a()

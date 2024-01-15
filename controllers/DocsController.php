@@ -36,6 +36,13 @@ class DocsController extends Controller
      */
     public function actionIndex()
     {
+        if(!Yii::$app->user->isGuest)
+        {
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
         $searchModel = new SearchDocs();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -53,6 +60,13 @@ class DocsController extends Controller
      */
     public function actionView($id)
     {
+        if(!Yii::$app->user->isGuest)
+        {
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);

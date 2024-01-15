@@ -37,13 +37,21 @@ class FacultyController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new SearchFaculty();
+        if(!Yii::$app->user->isGuest)
+        {
+            $searchModel = new SearchFaculty();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+        
     }
 
     /**
@@ -54,9 +62,17 @@ class FacultyController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(!Yii::$app->user->isGuest)
+        {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     /**
@@ -66,39 +82,55 @@ class FacultyController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Faculty();
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = new Faculty();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+    
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     public function actionGetUserDetails($id)
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
+        if(!Yii::$app->user->isGuest)
+        {
+            Yii::$app->response->format = Response::FORMAT_JSON;
 
-        try {
-            // Fetch user details based on the provided user ID
-            $user = Users::findOne($id);
-
-            if ($user !== null) {
-                return [
-                    'name' => $user->username,
-                    'email' => $user->email,
-                    'contact' => $user->contact,
-                    // Add or remove attributes as needed
-                ];
-            } else {
-                return ['error' => 'User not found'];
+            try {
+                // Fetch user details based on the provided user ID
+                $user = Users::findOne($id);
+    
+                if ($user !== null) {
+                    return [
+                        'name' => $user->username,
+                        'email' => $user->email,
+                        'contact' => $user->contact,
+                        // Add or remove attributes as needed
+                    ];
+                } else {
+                    return ['error' => 'User not found'];
+                }
+            } catch (\Exception $e) {
+                Yii::error('Error fetching user details: ' . $e->getMessage(), 'faculty');
+                return ['error' => 'An error occurred while fetching user details'];
             }
-        } catch (\Exception $e) {
-            Yii::error('Error fetching user details: ' . $e->getMessage(), 'faculty');
-            return ['error' => 'An error occurred while fetching user details'];
         }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
     /**
      * Updates an existing Faculty model.
@@ -109,15 +141,23 @@ class FacultyController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+    
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     /**
@@ -129,9 +169,17 @@ class FacultyController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(!Yii::$app->user->isGuest)
+        {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**

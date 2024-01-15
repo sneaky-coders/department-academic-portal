@@ -62,23 +62,39 @@ class RandomtimetableController extends Controller
      * @return mixed
      */
     public function actionIndex()
-{
-    $searchModel = new SearchRandomtimetable(); // Assuming your search model is named SearchRandomtimetable
-    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-    return $this->render('index', [
-        'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
-    ]);
-}
+    {
+        if(!Yii::$app->user->isGuest)
+        {
+            $searchModel = new SearchRandomtimetable(); // Assuming your search model is named SearchRandomtimetable
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+  
+    }
 
 public function actionDeleteAllRecords()
 {
-    // Delete all records from the Randomtimetable model
-    Randomtimetable::deleteAll();
+    if(!Yii::$app->user->isGuest)
+        {
+            Randomtimetable::deleteAll();
 
-    // Redirect to the index page or any other page
-    return $this->redirect(['index']);
+            // Redirect to the index page or any other page
+            return $this->redirect(['index']);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+    // Delete all records from the Randomtimetable model
+  
 }
 
 
@@ -90,9 +106,17 @@ public function actionDeleteAllRecords()
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(!Yii::$app->user->isGuest)
+        {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     /**
@@ -102,15 +126,23 @@ public function actionDeleteAllRecords()
      */
     public function actionCreate()
     {
-        $model = new Randomtimetable();
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = new Randomtimetable();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+    
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+     
     }
 
     /**
@@ -122,15 +154,23 @@ public function actionDeleteAllRecords()
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+    
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     /**
@@ -142,9 +182,17 @@ public function actionDeleteAllRecords()
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(!Yii::$app->user->isGuest)
+        {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     public function actionSem1a()

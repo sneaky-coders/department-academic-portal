@@ -57,13 +57,21 @@ class FacultyAllotmentController extends Controller
 
 public function actionIndex()
 {
-    $searchModel = new SearchFacultyallotment();
-    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-    return $this->render('index', [
-        'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
-    ]);
+    if(!Yii::$app->user->isGuest)
+        {
+            $searchModel = new SearchFacultyallotment();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+   
 }
 
 
@@ -75,9 +83,17 @@ public function actionIndex()
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(!Yii::$app->user->isGuest)
+        {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     /**
@@ -87,15 +103,23 @@ public function actionIndex()
      */
     public function actionCreate()
     {
-        $model = new Facultyallotment();
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = new Facultyallotment();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+    
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**
@@ -107,15 +131,23 @@ public function actionIndex()
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+    
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**
@@ -127,9 +159,17 @@ public function actionIndex()
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(!Yii::$app->user->isGuest)
+        {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**

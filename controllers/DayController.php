@@ -35,13 +35,21 @@ class DayController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new SearchDay();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        if(!Yii::$app->user->isGuest)
+        {
+            $searchModel = new SearchDay();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**
@@ -52,9 +60,17 @@ class DayController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(!Yii::$app->user->isGuest)
+        {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+       
     }
 
     /**
@@ -64,15 +80,23 @@ class DayController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Day();
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = new Day();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->day_id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->day_id]);
+            }
+    
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**
@@ -84,15 +108,23 @@ class DayController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(!Yii::$app->user->isGuest)
+        {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->day_id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->day_id]);
+            }
+    
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+      
     }
 
     /**
@@ -104,9 +136,17 @@ class DayController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(!Yii::$app->user->isGuest)
+        {
+            $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+        }
+        else
+        {
+            return $this->redirect(['/site/login']);
+        }
+        
     }
 
     /**
