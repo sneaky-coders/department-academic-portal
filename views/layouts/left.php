@@ -158,6 +158,9 @@
             );
 
 
+
+
+
             echo dmstr\widgets\Menu::widget(
                 [
                     'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
@@ -169,6 +172,40 @@
                             'items' => [
                                 ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/docs/create'],],
                                 ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/docs'],],
+                            ],
+                        ],
+                    ],
+                ]
+            );  
+
+            echo dmstr\widgets\Menu::widget(
+                [
+                    'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                    'items' => [
+                        [
+                            'label' => 'Certification Course',
+                            'icon' => 'building',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/certificationcourse/create'],],
+                                ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/certificationcourse'],],
+                            ],
+                        ],
+                    ],
+                ]
+            );  
+
+            echo dmstr\widgets\Menu::widget(
+                [
+                    'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
+                    'items' => [
+                        [
+                            'label' => 'Internship',
+                            'icon' => 'building',
+                            'url' => '#',
+                            'items' => [
+                                ['label' => 'Upload', 'icon' => 'circle-o', 'url' => ['/internship/create'],],
+                                ['label' => 'View', 'icon' => 'circle-o', 'url' => ['/internship'],],
                             ],
                         ],
                     ],

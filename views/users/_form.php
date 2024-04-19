@@ -21,12 +21,13 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'contact')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'usn')->textInput(['maxlength' => true]) ?>
 
 
    
 
 
-    <?= $form->field($model, 'level')->dropDownList(['prompt'=>'Select User Type',1=>'Admin',2=>'Faculty',3=>'Student',4=>'Tester']); ?>
+    <?= $form->field($model, 'level')->dropDownList(['prompt'=>'Select User Type',1=>'Admin',2=>'Faculty',3=>'Student',4=>'Project Committee',5=>'Academic Committe',6=>'Certification Committee']); ?>
 
    
 

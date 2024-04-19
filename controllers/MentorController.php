@@ -62,7 +62,7 @@ class MentorController extends Controller
     {
         if(!Yii::$app->user->isGuest)
         {
-            \ return $this->render('view', [
+             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
         }
