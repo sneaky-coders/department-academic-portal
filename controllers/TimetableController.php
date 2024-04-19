@@ -94,8 +94,7 @@ class TimetableController extends Controller
      */
     public function actionCreate()
     {
-        if(!Yii::$app->user->isGuest)
-        {
+        
             $model = new Timetable();
     
             if (!$model->load(Yii::$app->request->post())) {
@@ -148,11 +147,9 @@ class TimetableController extends Controller
                 ->andWhere(['OR', ['faculty_id1' => $facultyId], ['faculty_id2' => $facultyId], ['faculty_id3' => $facultyId]])
                 ->exists();
         }
-        }
-        else
-        {
-            return $this->redirect(['/site/login']);
-        }
+        
+        
+     
        
 
     
